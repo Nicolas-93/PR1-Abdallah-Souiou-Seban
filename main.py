@@ -2,6 +2,8 @@ import fltk
 import graphiques
 from typing import List, Iterable, Optional, Sequence, Dict, Set
 from dataclasses import dataclass
+import gameplay
+import graphiques
 
 @dataclass
 class Allumette:
@@ -13,6 +15,7 @@ nombre_allumettes = 21
 largeur_allumette = 5
 marge = 10
 k = 5
+selection = 0
 
 # Choisir les objets (image)
 
@@ -30,7 +33,7 @@ def gen_set_coup_possibles(k: int) -> Set:
     >>> gen_set_coup_possibles(1)
     {1}
     """
-    return {x for x in range(1, k+1)}
+    return [x for x in range(1, k+1)]
 
 
 
@@ -87,7 +90,8 @@ def dessiner_allumettes(liste_allumettes: List[Allumette]):
 
 if __name__ == "__main__":
     
-    coup_possibles = gen_set_coup_possibles(k)
+    # coup_possibles = gen_set_coup_possibles(k)
+    coup_possibles = [1,2,4,5] 
     liste_allumettes = initialiser_allumettes()
 
 
@@ -98,11 +102,31 @@ if __name__ == "__main__":
             # Gestion des événements
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
+
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
                 exit()
 
+            elif tev == "ClicGauche":
+                if fltk.ordonnee_souris()  >= 250 and fltk.ordonnee_souris() <= 350:
+                    selection = gameplay.selectionCoups(selection, 1, coup_possibles)
+                    
+                
+                if fltk.ordonnee_souris() < 250:
+                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
+                    selection = 0
+                    
+            
+            elif tev == "ClicDroit":
+                if fltk.ordonnee_souris()  >= 250 and fltk.ordonnee_souris() <= 350:
+                    selection = gameplay.selectionCoups(selection, -1, coup_possibles)
+                    
+
             dessiner_allumettes(liste_allumettes)
+            graphiques.encadre(liste_allumettes, selection, coup_possibles)
+
+
+
 
 
             fltk.mise_a_jour()
