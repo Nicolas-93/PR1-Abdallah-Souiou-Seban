@@ -1,4 +1,5 @@
 import fltk
+from typing import List, Iterable, Optional, Dict, Set
 
 def selectionCoups(selection, indice, coup_possibles):
     if (selection + indice) > (len(coup_possibles) - 1) or (selection + indice) < 0:
