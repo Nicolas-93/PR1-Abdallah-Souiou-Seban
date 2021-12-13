@@ -72,7 +72,6 @@ def initialiser_allumettes() -> List[Allumette]:
 
     x_max = nombre_allumettes * espacement - espacement/2
     centre = (largeur_fenetre - x_max)/2
-    print("xmax =", x_max, "centre =", centre)
 
     for i in range(0, nombre_allumettes):
         liste_allumettes.append(
@@ -118,6 +117,9 @@ def dessiner_allumettes(liste_allumettes: List[Allumette]):
     for allumette in liste_allumettes:
         dessin_allumette(allumette, 1)
 
+def fin():
+    print("Lol ta perdu (t'-'t) ")
+    exit(0)
 
 if __name__ == "__main__":
     
@@ -142,7 +144,7 @@ if __name__ == "__main__":
                     selection = gameplay.selectionCoups(selection, 1, coup_possibles)
                     
                 
-                if fltk.ordonnee_souris() < 250:
+                if 100 <= fltk.ordonnee_souris() <= 200 and 100 <= fltk.abscisse_souris() <= 400:
                     gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
                     selection = 0
                     
@@ -150,9 +152,19 @@ if __name__ == "__main__":
             elif tev == "ClicDroit":
                 if fltk.ordonnee_souris() >= 250 and fltk.ordonnee_souris() <= 350:
                     selection = gameplay.selectionCoups(selection, -1, coup_possibles)
-                    
+            fltk.rectangle(0,0,500,500, remplissage = "#3f3e47")     
 
+            
+            if 132 <= fltk.ordonnee_souris() <= 167 and 172 <= fltk.abscisse_souris() <= 327:
+                graphiques.beau_bouton(250,150, "black", "#898496" , 1, "Fin de tour", 30)
+            
+            else:
+                graphiques.beau_bouton(250,150, "black", "#dbdbdb" , 1, "Fin de tour", 30)
+            
             dessiner_allumettes(liste_allumettes)
+
+            if not coup_possible(liste_allumettes, coup_possibles):
+                fin()
             graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
 
