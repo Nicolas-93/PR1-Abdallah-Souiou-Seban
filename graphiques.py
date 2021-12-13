@@ -18,5 +18,13 @@ def encadre(liste_allumettes: List[Allumette], selection: int, coup_possibles: L
 def beau_bouton(x, y, color, bucket, thickness, texte, size):
     marge = 10
     longueur, hauteur = fltk.taille_texte(texte, police='Helvetica', taille='24')
-    fltk.rectangle(x - (longueur // 2) - marge, y - (hauteur//2) - marge, x + (longueur//2) + marge, y + (hauteur//2) + marge, couleur= color, remplissage= bucket , epaisseur= thickness, tag= '')
+
+    longueur = longueur // 2 + marge
+    hauteur = hauteur // 2 + marge
+
+    fltk.rectangle(
+        x - longueur, y - hauteur,
+        x + longueur, y + hauteur,
+        couleur= color, remplissage= bucket , epaisseur= thickness
+    )
     fltk.texte(x, y, texte, couleur='black', ancrage='center', police='Helvetica', taille= size, tag='')
