@@ -19,6 +19,7 @@ rayon_cercle_allumette = largeur_allumette*0.65
 marge = 10
 k = 5
 selection = 0
+joueur = 1
 
 
 def gen_lst_coup_possibles(k: int) -> list:
@@ -65,7 +66,7 @@ def initialiser_allumettes() -> List[Allumette]:
     Initialise une liste d'objets ``Allumette``, dont les coordonnées
     ont été adaptées à la taille de la fenêtre par leurs constantes globales
     """
-    
+
     liste_allumettes = []
     marge = 10
     espacement = largeur_fenetre / nombre_allumettes - largeur_allumette
@@ -83,8 +84,8 @@ def initialiser_allumettes() -> List[Allumette]:
             )
         )
         liste_allumettes[-1].bx = liste_allumettes[-1].ax + largeur_allumette
-        liste_allumettes[-1].by = liste_allumettes[-1].ay + hauteur_allumette           
-    
+        liste_allumettes[-1].by = liste_allumettes[-1].ay + hauteur_allumette
+
     return liste_allumettes
 
 
@@ -118,13 +119,13 @@ def dessiner_allumettes(liste_allumettes: List[Allumette]):
         dessin_allumette(allumette, 1)
 
 def fin():
-    print("Lol ta perdu (t'-'t) ")
+    print(f"Lol ta perdu, Joueur {joueur} (t'-'t) ")
     exit(0)
 
 if __name__ == "__main__":
-    
+
     # coup_possibles = gen_set_coup_possibles(k)
-    coup_possibles = [1,2,4,5] 
+    coup_possibles = [1,2,4,5]
     liste_allumettes = initialiser_allumettes()
 
     fltk.cree_fenetre(largeur_fenetre, hauteur_fenetre)
@@ -135,6 +136,7 @@ if __name__ == "__main__":
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
 
+
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
                 exit()
@@ -142,31 +144,34 @@ if __name__ == "__main__":
             elif tev == "ClicGauche":
                 if fltk.ordonnee_souris() >= 250 and fltk.ordonnee_souris() <= 350:
                     selection = gameplay.selectionCoups(selection, 1, coup_possibles)
-                    
-                
+
+
                 if 100 <= fltk.ordonnee_souris() <= 200 and 100 <= fltk.abscisse_souris() <= 400:
                     gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
+                    joueur = 2 - (joueur - 1)
                     selection = 0
-                    
-            
+
+
             elif tev == "ClicDroit":
                 if fltk.ordonnee_souris() >= 250 and fltk.ordonnee_souris() <= 350:
                     selection = gameplay.selectionCoups(selection, -1, coup_possibles)
-            fltk.rectangle(0,0,500,500, remplissage = "#3f3e47")     
+            fltk.rectangle(0,0,500,500, remplissage = "#3f3e47")
 
-            
+
             if 132 <= fltk.ordonnee_souris() <= 167 and 172 <= fltk.abscisse_souris() <= 327:
                 graphiques.beau_bouton(250,150, "black", "#898496" , 1, "Fin de tour", 30)
-            
+
             else:
                 graphiques.beau_bouton(250,150, "black", "#dbdbdb" , 1, "Fin de tour", 30)
-            
+
             dessiner_allumettes(liste_allumettes)
 
             if not coup_possible(liste_allumettes, coup_possibles):
+                joueur = 2 - (joueur - 1)
                 fin()
             graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
+            fltk.texte(250, 100, f'Joueur {joueur}', couleur='white', ancrage='center', police='Helvetica', taille= 24)
 
             fltk.mise_a_jour()
 
