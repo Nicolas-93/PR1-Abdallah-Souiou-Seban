@@ -27,6 +27,7 @@ __all__ = [
     'point',
     'image',
     'texte',
+    
     'taille_texte',
     # effacer
     'efface_tout',
