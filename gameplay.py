@@ -52,9 +52,9 @@ def initialiser_allumettes() -> List[Allumette]:
         liste_allumettes.append(
             Allumette(
                 ax = i * espacement + centre,
-                ay = cfg.hauteur_fenetre/2,
+                ay = cfg.hauteur_fenetre/2 - cfg.hauteur_allumette/2,
                 bx = i * espacement + centre + cfg.largeur_allumette,
-                by = cfg.hauteur_fenetre/2 + cfg.hauteur_allumette
+                by = cfg.hauteur_fenetre/2 + cfg.hauteur_allumette/2
             )
         )
     
@@ -98,3 +98,14 @@ def coup_possible(liste_allumettes: List[Allumette], k_coups_possibles: list, mi
         if coup <= len(liste_allumettes):
             return True
     return False
+
+
+def message_interruption():
+    """
+    Message à l'intention de l'utilisateur qui utiliserait Ctrl+C...
+    """
+    print("\nVous devriez pouvoir fermer la fenêtre avec la croix",
+          "théoriquement...",
+          "\nMais merci d'y avoir pris plaisir!! A bientôt!!")
+    # fltk.ferme_fenetre()
+    exit(0)

@@ -51,7 +51,7 @@ def dessin_allumette(Allumette: Allumette):
         '#D4AF37', '#D4AF37'
     )
     fltk.cercle(
-        Allumette.ax+(cfg.largeur_allumette/2), Allumette.ay,
+        Allumette.ax+(cfg.largeur_allumette/2), Allumette.ay+cfg.rayon_cercle_allumette-1,
         cfg.rayon_cercle_allumette,
         'red', 'red'
     )
