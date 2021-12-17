@@ -10,15 +10,17 @@ class Bouton:
     bx: float
     by: float
     texte: str
+    enable_hovered : bool    
     taille_texte = None
     marge_texte = 0.8
-    police = 'Helvetica'
+    police = 'Biometric Joe'
     couleur_texte = 'black'
     couleur_fond = 'white'
     couleur_hovered = '#848484'
 
 
-def cree_bouton(ax: float, ay: float, bx: float, by: float, texte: str) -> Bouton:
+
+def cree_bouton(ax: float, ay: float, bx: float, by: float, texte: str, hovered=True) -> Bouton:
     """
     Crée un bouton à partir de positions relatives à la fenêtre,
     et avec le libellé ``texte``
@@ -36,7 +38,7 @@ def cree_bouton(ax: float, ay: float, bx: float, by: float, texte: str) -> Bouto
                 ay*cfg.hauteur_fenetre,
                 bx*cfg.largeur_fenetre,
                 by*cfg.hauteur_fenetre,
-                texte,
+                texte, hovered
              )
     bouton.taille_texte = taille_texte_bouton(bouton, bouton.marge_texte)
     return bouton
@@ -68,7 +70,7 @@ def dessiner_bouton(bouton: Bouton) -> bool:
         bouton.ax, bouton.ay,
         bouton.bx, bouton.by,
         'black',
-        bouton.couleur_hovered if survole else bouton.couleur_fond
+        bouton.couleur_hovered if ( survole and bouton.enable_hovered) else bouton.couleur_fond
     )
 
     fltk.texte(

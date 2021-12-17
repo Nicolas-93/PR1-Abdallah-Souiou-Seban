@@ -20,9 +20,10 @@ def selectionCoups(selection, indice, coup_possibles):
         return (selection + indice)
 
 
-def jouer_tour(selection, liste_allumettes, coup_possibles):
+def jouer_tour(selection, liste_allumettes, coup_possibles, boutons):
     choix = coup_possibles[selection]
     del liste_allumettes[-choix:]
+    boutons[0].ay, boutons[0].by, boutons[1].ay, boutons[1].by = boutons[1].ay, boutons[1].by, boutons[0].ay, boutons[0].by
 
 
 def selection_possible(liste_allumettes, selection, coups_possibles):

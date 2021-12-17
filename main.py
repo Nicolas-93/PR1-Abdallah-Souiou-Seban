@@ -53,9 +53,6 @@ def menu():
                 if nom_bouton == 'Jeu normal':
                     fin(jeu())
 
-            elif tev == "ClicDroit":
-                pass
-
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
@@ -64,17 +61,24 @@ def menu():
 
 def jeu():
     # coup_possibles = gen_set_coup_possibles(cfg.k)
+    hitbox_allumettes = bouton.cree_bouton(0, 0.5, 1, 0.7, '')
+    selection = 0
+    joueur = 1
+    texte_joueur = "Joueur 1"
     coup_possibles = [1,2,4,5]
     liste_allumettes = gameplay.initialiser_allumettes()
     liste_boutons_jeu = [
         bouton.cree_bouton(
-            0.3, 0.05, 0.7, 0.15,
+            cfg.bouton_fdt_ax, cfg.bouton_fdt_ay, cfg.bouton_fdt_bx, cfg.bouton_fdt_by,
             'Fin de tour'
+        ),
+        bouton.cree_bouton(
+            cfg.bouton_cki_ax, cfg.bouton_cki_ay, cfg.bouton_cki_bx, cfg.bouton_cki_by, 
+            texte_joueur, hovered=False
         )
     ]
-    hitbox_allumettes = bouton.cree_bouton(0, 0.5, 1, 0.7, '')
-    selection = 0
-    joueur = 1
+
+
 
     while True:
         try:
@@ -95,9 +99,10 @@ def jeu():
                     selection = gameplay.selectionCoups(selection, 1, coup_possibles)
 
                 if nom_bouton == 'Fin de tour':
-                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
+                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
                     selection = 0
+                    liste_boutons_jeu[1].texte = f"Joueur {joueur}"
 
             elif tev == "ClicDroit":
                 if bouton.curseur_sur_bouton(hitbox_allumettes):
@@ -110,11 +115,6 @@ def jeu():
             graphiques.dessiner_allumettes(liste_allumettes)
             graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
-            fltk.texte(
-                cfg.largeur_fenetre/2, 100, f'Joueur {joueur}',
-                couleur='white', ancrage='center', police='Helvetica', taille=24
-            )
-
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
@@ -125,7 +125,3 @@ def jeu():
 if __name__ == "__main__":
     fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre)
     menu()
-
-
-
-
