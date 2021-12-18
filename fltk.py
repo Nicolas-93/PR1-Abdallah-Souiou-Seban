@@ -25,9 +25,11 @@ __all__ = [
     'rectangle',
     'cercle',
     'point',
-    'image',
+    # Images
+    'afficher_image',
+    'ouvrir_image',
+    'redimensionner_image',
     'texte',
-    
     'taille_texte',
     # effacer
     'efface_tout',
@@ -363,28 +365,78 @@ def point(x, y, couleur='black', epaisseur=1, tag=''):
 
 # Image
 
-def image(x, y, fichier, ancrage='center', tag=''):
+def afficher_image(x, y, image, ancrage='center', tag=''):
     """
-    Affiche l'image contenue dans ``fichier`` avec ``(x, y)`` comme centre. Les
+    Affiche l'image avec ``(x, y)`` comme centre. Les
     valeurs possibles du point d'ancrage sont ``'center'``, ``'nw'``, etc.
 
     :param float x: abscisse du point d'ancrage
     :param float y: ordonnée du point d'ancrage
-    :param str fichier: nom du fichier contenant l'image
+    :param str image: nom du fichier contenant l'image, ou un objet image
     :param ancrage: position du point d'ancrage par rapport à l'image
     :param str tag: étiquette d'objet (défaut : pas d'étiquette)
     :return: identificateur d'objet
     """
-    if PIL_AVAILABLE:
-        img = Image.open(fichier)
-        tkimage = ImageTk.PhotoImage(img)
+    if type(image) == str:
+        if PIL_AVAILABLE:
+            img = Image.open(image)
+            tkimage = ImageTk.PhotoImage(img)
+        else:
+            tkimage = tk.PhotoImage(file=image)
     else:
-        tkimage = tk.PhotoImage(file=fichier)
+        tkimage = image
+    
     img_object = __canevas.canvas.create_image(
-        x, y, anchor=ancrage, image=tkimage, tag=tag)
+        x, y, anchor=ancrage, image=tkimage, tag=tag
+    )
     __img[img_object] = tkimage
+
     return img_object
 
+
+def taille_image(fichier) -> tuple:
+    """
+    Retourne un tuple représentant la largeur et la hauteur
+    de l'image.
+
+    :param str fichier: Nom du fichier image
+    """
+    if PIL_AVAILABLE:
+        with Image.open(fichier) as img:
+            return img.size
+
+    PILError()
+    return None
+
+
+def redimensionner_image(fichier, coeff:float,
+                         reechantillonage=None):
+    """
+    Ouvre une image et la redimensionne avec un coefficient multiplicateur,
+    il est également possible d'appliquer un filtre de réchantillonage pour
+    améliorer le rendu du redimensionnement:
+    Au plus proche: ``0``
+    Lanczoz: ``1``
+    Bilinéaire: ``2``
+    Bicubique: ``3``
+    Box: ``4``
+    Hamming: ``5`` 
+
+    :param tuple taille: Couple (largeur, hauteur) représentant la taille redimenssionée
+    :param fichier: Fichier de l'image à redimensioner
+    :param int reechantillonage: {0, 1, 2, 3, 4, 5} Algorithme à utiliser pour
+    améliorer le rendu, ``None``pour aucun.
+    :return: Objet image
+    """
+
+    if PIL_AVAILABLE:
+        with Image.open(fichier) as img:
+            taille = img.size
+            taille_coeff = (int(taille[0]*coeff), int(taille[1]*coeff))
+            return ImageTk.PhotoImage(img.resize(taille_coeff, reechantillonage))
+    else:
+        PILError()
+        return None
 
 # Texte
 
@@ -583,3 +635,7 @@ def abscisse_souris():
 
 def ordonnee_souris():
     return __canevas.canvas.winfo_pointery() - __canevas.canvas.winfo_rooty()
+
+
+def PILError():
+    print("PIL n'est pas disponible")

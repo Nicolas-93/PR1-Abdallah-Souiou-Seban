@@ -64,3 +64,4 @@ def dessiner_allumettes(liste_allumettes: List[Allumette]):
     """
     for allumette in liste_allumettes:
         dessin_allumette(allumette)
+

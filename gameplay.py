@@ -11,7 +11,6 @@ class Allumette:
     by: float
 
 
-
 def selectionCoups(selection, indice, coup_possibles):
     if (selection + indice) > (len(coup_possibles) - 1) or (selection + indice) < 0:
         return selection
@@ -20,10 +19,9 @@ def selectionCoups(selection, indice, coup_possibles):
         return (selection + indice)
 
 
-def jouer_tour(selection, liste_allumettes, coup_possibles, boutons):
+def jouer_tour(selection, liste_allumettes, coup_possibles):
     choix = coup_possibles[selection]
     del liste_allumettes[-choix:]
-    boutons[0].ay, boutons[0].by, boutons[1].ay, boutons[1].by = boutons[1].ay, boutons[1].by, boutons[0].ay, boutons[0].by
 
 
 def selection_possible(liste_allumettes, selection, coups_possibles):

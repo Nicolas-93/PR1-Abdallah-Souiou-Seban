@@ -79,7 +79,6 @@ def jeu():
     ]
 
 
-
     while True:
         try:
             fltk.efface_tout()
@@ -95,14 +94,15 @@ def jeu():
 
             elif tev == "ClicGauche":
                 if (bouton.curseur_sur_bouton(hitbox_allumettes)
-                    and gameplay.selection_possible(liste_allumettes, selection, coup_possibles)):
+                and gameplay.selection_possible(liste_allumettes, selection, coup_possibles)):
                     selection = gameplay.selectionCoups(selection, 1, coup_possibles)
 
                 if nom_bouton == 'Fin de tour':
-                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles, liste_boutons_jeu)
+                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
+                    bouton.intervertir_pos_boutons(liste_boutons_jeu[0], liste_boutons_jeu[1], liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
-                    selection = 0
                     liste_boutons_jeu[1].texte = f"Joueur {joueur}"
+                    selection = 0
 
             elif tev == "ClicDroit":
                 if bouton.curseur_sur_bouton(hitbox_allumettes):

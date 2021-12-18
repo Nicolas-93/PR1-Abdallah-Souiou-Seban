@@ -12,12 +12,11 @@ class Bouton:
     texte: str
     enable_hovered : bool    
     taille_texte = None
-    marge_texte = 0.8
+    marge_texte = 0.8 # Proportion du texte par rapport au cadre
     police = 'Biometric Joe'
     couleur_texte = 'black'
     couleur_fond = 'white'
     couleur_hovered = '#848484'
-
 
 
 def cree_bouton(ax: float, ay: float, bx: float, by: float, texte: str, hovered=True) -> Bouton:
@@ -40,7 +39,7 @@ def cree_bouton(ax: float, ay: float, bx: float, by: float, texte: str, hovered=
                 by*cfg.hauteur_fenetre,
                 texte, hovered
              )
-    bouton.taille_texte = taille_texte_bouton(bouton, bouton.marge_texte)
+    bouton.taille_texte = taille_texte_bouton(bouton)
     return bouton
     
 
@@ -112,14 +111,27 @@ def curseur_sur_bouton(Bouton):
             and (Bouton.ay <= fltk.ordonnee_souris() <= Bouton.by))
 
 
-def taille_texte_bouton(bouton: Bouton, marge=0):
+def taille_texte_bouton(bouton: Bouton):
+    """
+    Détermine une taille de texte optimisé pour le bouton
 
-    hauteur_bouton = (bouton.by - bouton.ay)*marge
-    largeur_bouton = (bouton.bx - bouton.ax)*marge
+    :param Bouton bouton: Objet Bouton
+    :return int: Taille du texte à utiliser
+    """
+
+    hauteur_bouton = (bouton.by - bouton.ay)*bouton.marge_texte
+    largeur_bouton = (bouton.bx - bouton.ax)*bouton.marge_texte
     taille_texte = 1
 
-    while (fltk.taille_texte(bouton.texte, bouton.police, taille_texte)[0] < largeur_bouton
-            and fltk.taille_texte(bouton.texte, bouton.police, taille_texte)[1] < hauteur_bouton):
+    while True:
+        largeur_hauteur = fltk.taille_texte(bouton.texte, bouton.police, taille_texte)
+        if largeur_hauteur[0] > largeur_bouton or largeur_hauteur[1] > hauteur_bouton:
+            break
         taille_texte += 1
 
-    return taille_texte - 1
+    return taille_texte
+
+
+def intervertir_pos_boutons(bouton1: Bouton, bouton2: Bouton, liste_boutons: List[Bouton]):
+    bouton1.ay, bouton1.by, bouton2.ay, bouton2.by = bouton2.ay, bouton2.by, bouton1.ay, bouton1.by
+    bouton1.ax, bouton1.bx, bouton2.ax, bouton2.bx = bouton2.ax, bouton2.bx, bouton1.ax, bouton1.bx

@@ -1,6 +1,6 @@
 # Configuration
 
-largeur_fenetre, hauteur_fenetre = 500, 500 
+largeur_fenetre, hauteur_fenetre = 500,500
 nombre_allumettes = 15
 largeur_allumette, hauteur_allumette = 5, 100
 rayon_cercle_allumette = largeur_allumette*0.70
