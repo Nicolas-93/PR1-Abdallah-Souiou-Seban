@@ -27,8 +27,9 @@ __all__ = [
     'point',
     # Images
     'afficher_image',
-    'ouvrir_image',
+    'taille_image',
     'redimensionner_image',
+    # Texte
     'texte',
     'taille_texte',
     # effacer
@@ -372,15 +373,15 @@ def afficher_image(x, y, image, ancrage='center', tag=''):
 
     :param float x: abscisse du point d'ancrage
     :param float y: ordonnée du point d'ancrage
-    :param str image: nom du fichier contenant l'image, ou un objet image
+    :param image: nom du fichier contenant l'image, ou un objet image
     :param ancrage: position du point d'ancrage par rapport à l'image
     :param str tag: étiquette d'objet (défaut : pas d'étiquette)
     :return: identificateur d'objet
     """
     if type(image) == str:
         if PIL_AVAILABLE:
-            img = Image.open(image)
-            tkimage = ImageTk.PhotoImage(img)
+            with Image.open(image) as img:
+                tkimage = ImageTk.PhotoImage(img)
         else:
             tkimage = tk.PhotoImage(file=image)
     else:
@@ -422,8 +423,8 @@ def redimensionner_image(fichier, coeff:float,
     Box: ``4``
     Hamming: ``5`` 
 
-    :param tuple taille: Couple (largeur, hauteur) représentant la taille redimenssionée
     :param fichier: Fichier de l'image à redimensioner
+    :param float coeff: Coefficient de redimensionnement
     :param int reechantillonage: {0, 1, 2, 3, 4, 5} Algorithme à utiliser pour
     améliorer le rendu, ``None``pour aucun.
     :return: Objet image

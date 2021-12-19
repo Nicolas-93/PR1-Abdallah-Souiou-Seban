@@ -24,44 +24,40 @@ def encadre(liste_allumettes: List[Allumette], selection: int, coup_possibles: L
     )
 
 
-def beau_bouton(x, y, color, bucket, thickness, texte, size):
-    marge = 10
-    longueur, hauteur = fltk.taille_texte(texte, police='Helvetica', taille='24')
-
-    longueur = longueur // 2 + marge
-    hauteur = hauteur // 2 + marge
-
-    fltk.rectangle(
-        x - longueur, y - hauteur,
-        x + longueur, y + hauteur,
-        couleur= color, remplissage= bucket , epaisseur= thickness
-    )
-    fltk.texte(x, y, texte, couleur='black', ancrage='center', police='Helvetica', taille= size, tag='')
-
-def dessin_allumette(Allumette: Allumette):
-    """
-    Dessine une allumette
-
-    :param Allumette: Objet ``Allumette``
-    """
-
-    fltk.rectangle(
-        Allumette.ax, Allumette.ay,
-        Allumette.bx, Allumette.by,
-        '#D4AF37', '#D4AF37'
-    )
-    fltk.cercle(
-        Allumette.ax+(cfg.largeur_allumette/2), Allumette.ay+cfg.rayon_cercle_allumette-1,
-        cfg.rayon_cercle_allumette,
-        'red', 'red'
-    )
-
-def dessiner_allumettes(liste_allumettes: List[Allumette]):
+def dessiner_allumettes(liste_allumettes: List[Allumette], image_allumette, image_allumette_brulee):
     """
     Dessines les allumettes de la liste.
 
     :param liste_allumettes: Liste d'objets ``Allumette``
     """
-    for allumette in liste_allumettes:
-        dessin_allumette(allumette)
 
+    for allumette in liste_allumettes:
+        image = image_allumette_brulee if allumette.selection else image_allumette
+        fltk.afficher_image(
+            allumette.ax,
+            allumette.ay,
+            image, ancrage='nw'
+        )
+
+
+def calcul_taille_image(taille_image: tuple, taille_box: tuple):
+    """
+    Calcule le coefficient d'agrandissement ou de réduction (afin de préserver le ratio)
+    à appliquer à l'image, afin d'optimiser l'espace de la box.
+    """
+
+    largeur_image, hauteur_image = taille_image
+    largeur_box, hauteur_box = taille_box
+
+    return min(largeur_box/largeur_image, hauteur_box/hauteur_image)
+
+
+def background(couleur: str) -> None:
+    
+    fltk.rectangle(
+        0, 0,
+        cfg.largeur_fenetre, cfg.hauteur_fenetre,
+        remplissage=couleur
+    )
+
+    return None

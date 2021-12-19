@@ -132,6 +132,6 @@ def taille_texte_bouton(bouton: Bouton):
     return taille_texte
 
 
-def intervertir_pos_boutons(bouton1: Bouton, bouton2: Bouton, liste_boutons: List[Bouton]):
+def intervertir_pos_boutons(bouton1: Bouton, bouton2: Bouton):
     bouton1.ay, bouton1.by, bouton2.ay, bouton2.by = bouton2.ay, bouton2.by, bouton1.ay, bouton1.by
     bouton1.ax, bouton1.bx, bouton2.ax, bouton2.bx = bouton2.ax, bouton2.bx, bouton1.ax, bouton1.bx

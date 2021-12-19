@@ -16,7 +16,7 @@ def fin(joueur: int):
     """
     :param int joueur: Numéro du joueur
     """
-    print(f"Lol ta perdu, Joueur {joueur}")
+    print(f"Lol t'as perdu, Joueur {joueur}")
 
 def menu():
 
@@ -39,7 +39,8 @@ def menu():
     while True:
         try:
             fltk.efface_tout()
-            fltk.rectangle(0, 0, cfg.largeur_fenetre, cfg.hauteur_fenetre, remplissage = "#3f3e47")
+            graphiques.background("#3f3e47")
+
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
 
@@ -64,7 +65,6 @@ def jeu():
     hitbox_allumettes = bouton.cree_bouton(0, 0.5, 1, 0.7, '')
     selection = 0
     joueur = 1
-    texte_joueur = "Joueur 1"
     coup_possibles = [1,2,4,5]
     liste_allumettes = gameplay.initialiser_allumettes()
     liste_boutons_jeu = [
@@ -74,19 +74,25 @@ def jeu():
         ),
         bouton.cree_bouton(
             cfg.bouton_cki_ax, cfg.bouton_cki_ay, cfg.bouton_cki_bx, cfg.bouton_cki_by, 
-            texte_joueur, hovered=False
+            "Joueur 1", hovered=False
         )
     ]
-
+    coeff = graphiques.calcul_taille_image(
+        cfg.taille_image,
+        (cfg.largeur_allumette, cfg.hauteur_allumette)
+    )
+    image_allumette = fltk.redimensionner_image('allumette.png', coeff)
+    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', coeff)
 
     while True:
         try:
             fltk.efface_tout()
-            fltk.rectangle(0, 0, cfg.largeur_fenetre, cfg.hauteur_fenetre, remplissage = "#3f3e47")
+            graphiques.background("#3f3e47")
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
+            #fltk.ligne(cfg.largeur_fenetre/2, 0, cfg.largeur_fenetre/2, cfg.hauteur_fenetre)
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
@@ -99,7 +105,7 @@ def jeu():
 
                 if nom_bouton == 'Fin de tour':
                     gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
-                    bouton.intervertir_pos_boutons(liste_boutons_jeu[0], liste_boutons_jeu[1], liste_boutons_jeu)
+                    bouton.intervertir_pos_boutons(liste_boutons_jeu[0], liste_boutons_jeu[1])
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f"Joueur {joueur}"
                     selection = 0
@@ -112,14 +118,13 @@ def jeu():
                 joueur = 2 - (joueur - 1)
                 return joueur
 
-            graphiques.dessiner_allumettes(liste_allumettes)
+            graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
             graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
             gameplay.message_interruption()
-            break
 
 
 if __name__ == "__main__":
