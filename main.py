@@ -62,11 +62,16 @@ def menu():
 
 def jeu():
     # coup_possibles = gen_set_coup_possibles(cfg.k)
-    hitbox_allumettes = bouton.cree_bouton(0, 0.5, 1, 0.7, '')
     selection = 0
     joueur = 1
     coup_possibles = [1,2,4,5]
     liste_allumettes = gameplay.initialiser_allumettes()
+    hitbox_allumettes = bouton.cree_bouton(
+        liste_allumettes[0].ax/cfg.largeur_fenetre,
+        liste_allumettes[0].ay/cfg.hauteur_fenetre,
+        liste_allumettes[-1].bx/cfg.largeur_fenetre,
+        liste_allumettes[-1].by/cfg.hauteur_fenetre,
+        '')
     liste_boutons_jeu = [
         bouton.cree_bouton(
             cfg.bouton_fdt_ax, cfg.bouton_fdt_ay, cfg.bouton_fdt_bx, cfg.bouton_fdt_by,

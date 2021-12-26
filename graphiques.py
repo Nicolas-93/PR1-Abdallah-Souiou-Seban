@@ -23,6 +23,17 @@ def encadre(liste_allumettes: List[Allumette], selection: int, coup_possibles: L
         couleur = "white"
     )
 
+    for i in range(len(liste_allumettes)):
+        if i <= encadrement:
+            liste_allumettes[-i].selection = True
+        else:
+            liste_allumettes[-i].selection = False
+
+        if encadrement:
+            liste_allumettes[0].selection = False
+        else:
+            liste_allumettes[-i].selection = True
+
 
 def dessiner_allumettes(liste_allumettes: List[Allumette], image_allumette, image_allumette_brulee):
     """
