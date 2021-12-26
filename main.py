@@ -53,11 +53,13 @@ def menu():
             elif tev == "ClicGauche":
                 if nom_bouton == 'Jeu normal':
                     fin(jeu())
+                if nom_bouton == 'Options':
+                    options()
 
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
-            gameplay.message_interruption()            
+            gameplay.message_interruption()
 
 
 def jeu():
@@ -78,7 +80,7 @@ def jeu():
             'Fin de tour'
         ),
         bouton.cree_bouton(
-            cfg.bouton_cki_ax, cfg.bouton_cki_ay, cfg.bouton_cki_bx, cfg.bouton_cki_by, 
+            cfg.bouton_cki_ax, cfg.bouton_cki_ay, cfg.bouton_cki_bx, cfg.bouton_cki_by,
             "Joueur 1", hovered=False
         )
     ]
@@ -120,22 +122,76 @@ def jeu():
                 if bouton.curseur_sur_bouton(hitbox_allumettes):
                     selection = gameplay.selectionCoups(selection, -1, coup_possibles)
                 graphiques.encadre(liste_allumettes, selection, coup_possibles)
-            
+
             if not gameplay.coup_possible(liste_allumettes, coup_possibles):
                 joueur = 2 - (joueur - 1)
                 return joueur
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
             
-
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
             gameplay.message_interruption()
 
 
+def options():
+    liste_boutons_option = [
+        bouton.cree_bouton(
+            0.2, 0.60, 0.8, 0.70,
+            'Mode misère'
+        ),
+        bouton.cree_bouton(
+            0.2, 0.75, 0.8, 0.85,
+            'Menu'
+        )
+    ]
+    liste_boutons_option[0].couleur_fond = '#cf0e0e'
+    liste_boutons_option[0].couleur_hovered = '#941010'
+
+    bouton.unifier_taille_texte(liste_boutons_option)
+    while True:
+        try:
+            fltk.efface_tout()
+            fltk.rectangle(0, 0, cfg.largeur_fenetre, cfg.hauteur_fenetre, remplissage = "#3f3e47")
+            ev = fltk.donne_ev()
+            tev = fltk.type_ev(ev)
+
+            nom_bouton = bouton.dessiner_boutons(liste_boutons_option)
+
+            if tev == 'ClicGauche':
+                if nom_bouton == 'Mode misère':
+                    liste_boutons_option[0] = bouton.cree_bouton(
+                                            0.2, 0.60, 0.8, 0.70,
+                                            'Mode normal'
+                                        )
+                    liste_boutons_option[0].couleur_fond = '#0a8029'
+                    liste_boutons_option[0].couleur_hovered = '#0b4f34'
+                    cfg.misere = False
+
+                elif nom_bouton == 'Mode normal':
+                    liste_boutons_option[0] = bouton.cree_bouton(
+                                            0.2, 0.60, 0.8, 0.70,
+                                            'Mode misère'
+                                        )
+                    liste_boutons_option[0].couleur_fond = '#cf0e0e'
+                    liste_boutons_option[0].couleur_hovered = '#941010'
+                    cfg.misere = True
+
+                if nom_bouton == 'Menu':
+                    break
+            if tev == 'Quitte' or tev == 'Touche' and fltk.touche(ev) == 'Escape':
+                break
+
+
+            fltk.mise_a_jour()
+        except KeyboardInterrupt:
+            gameplay.message_interruption()
+            break
+
+
 if __name__ == "__main__":
-    
+
     fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre)
-    
+
     menu()
