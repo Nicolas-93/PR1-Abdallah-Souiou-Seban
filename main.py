@@ -28,6 +28,8 @@ def fin(joueur: int):
     liste_boutons_fin[0].couleur_hovered = '#0b8a68'
     liste_boutons_fin[1].couleur_hovered = '#c21532'
 
+    bouton.unifier_taille_texte(liste_boutons_fin)
+
     if cfg.misere == True:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
     

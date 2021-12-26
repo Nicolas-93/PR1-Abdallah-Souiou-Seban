@@ -17,11 +17,11 @@ def encadre(liste_allumettes: List[Allumette], selection: int, coup_possibles: L
     else:
         encadrement = 0
 
-    fltk.rectangle(
+    '''fltk.rectangle(
         liste_allumettes[-encadrement].ax - marge, liste_allumettes[-encadrement].ay - marge,
         liste_allumettes[-1].bx + marge, liste_allumettes[-1].by + marge,
         couleur = "white"
-    )
+    )'''
 
     for i in range(len(liste_allumettes)):
         if i <= encadrement:
