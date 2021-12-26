@@ -123,8 +123,11 @@ def taille_texte_bouton(bouton: Bouton):
     largeur_bouton = (bouton.bx - bouton.ax)*bouton.marge_texte
     taille_texte = 1
 
+    retours_lignes = bouton.texte.count('\n') + 1
+    
     while True:
         largeur_hauteur = fltk.taille_texte(bouton.texte, bouton.police, taille_texte)
+        largeur_hauteur[1] = largeur_hauteur[1]/retours_lignes
         if largeur_hauteur[0] > largeur_bouton or largeur_hauteur[1] > hauteur_bouton:
             break
         taille_texte += 1

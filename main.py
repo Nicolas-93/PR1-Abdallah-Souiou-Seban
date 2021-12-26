@@ -16,7 +16,51 @@ def fin(joueur: int):
     """
     :param int joueur: Numéro du joueur
     """
-    print(f"Lol t'as perdu, Joueur {joueur}")
+    liste_boutons_fin = [bouton.cree_bouton(
+        0.1, 0.6, 0.45, 0.8,
+        "Menu"
+    ),
+    bouton.cree_bouton(
+        0.55, 0.6, 0.9, 0.8,
+        "Quitter"
+    )  
+    ]
+    liste_boutons_fin[0].couleur_hovered = '#0b8a68'
+    liste_boutons_fin[1].couleur_hovered = '#c21532'
+
+    if cfg.misere == True:
+        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+    
+    else:
+        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la dernière allumette !\n:D"
+
+    while True:
+        try:
+            fltk.efface_tout()
+            graphiques.background("#3f3e47")
+
+            ev = fltk.donne_ev()
+            tev = fltk.type_ev(ev)
+
+            nom_bouton = bouton.dessiner_boutons(liste_boutons_fin)
+            fltk.texte(0.15*cfg.largeur_fenetre, 0.2*cfg.hauteur_fenetre,
+            message, couleur= "white", police = 'Biometric Joe', taille = 20)
+
+            if tev == 'Quitte':
+                fltk.ferme_fenetre()
+                exit()
+
+            elif tev == "ClicGauche":
+                if nom_bouton == 'Menu':
+                    menu()
+                if nom_bouton == 'Quitter':
+                    fltk.ferme_fenetre()
+                    exit()
+
+            fltk.mise_a_jour()
+
+        except KeyboardInterrupt:
+            gameplay.message_interruption()
 
 def menu():
 
