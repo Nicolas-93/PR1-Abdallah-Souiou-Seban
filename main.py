@@ -160,18 +160,19 @@ def jeu():
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f"Joueur {joueur}"
                     selection = 0
+                graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
             elif tev == "ClicDroit":
                 if bouton.curseur_sur_bouton(hitbox_allumettes):
                     selection = gameplay.selectionCoups(selection, -1, coup_possibles)
+                graphiques.encadre(liste_allumettes, selection, coup_possibles)
 
             if not gameplay.coup_possible(liste_allumettes, coup_possibles):
                 joueur = 2 - (joueur - 1)
                 return joueur
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
-            graphiques.encadre(liste_allumettes, selection, coup_possibles)
-
+            
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
