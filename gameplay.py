@@ -9,6 +9,7 @@ class Allumette:
     ay: float
     bx: float
     by: float
+    selection = False
 
 
 def selectionCoups(selection, indice, coup_possibles):
@@ -34,30 +35,39 @@ def selection_possible(liste_allumettes, selection, coups_possibles):
     return coups_possibles[selection] < len(liste_allumettes)
 
 
-def initialiser_allumettes() -> List[Allumette]:
+def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[Allumette]: # Avec support du jeu de marienbad
     """
     Initialise une liste d'objets ``Allumette``, dont les coordonnées
     ont été adaptées à la taille de la fenêtre par leurs constantes globales
     """
-
-    liste_allumettes = []
-    marge = 10
-    espacement = cfg.largeur_fenetre / cfg.nombre_allumettes - cfg.largeur_allumette
-
-    x_max = cfg.nombre_allumettes * espacement - espacement/2
-    centre = (cfg.largeur_fenetre - x_max)/2
-
-    for i in range(0, cfg.nombre_allumettes):
-        liste_allumettes.append(
-            Allumette(
-                ax = i * espacement + centre,
-                ay = cfg.hauteur_fenetre/2 - cfg.hauteur_allumette/2,
-                bx = i * espacement + centre + cfg.largeur_allumette,
-                by = cfg.hauteur_fenetre/2 + cfg.hauteur_allumette/2
-            )
-        )
     
-    return liste_allumettes
+    liste_allumettes = []
+    nb_rangees = len(liste_marienbad)
+    nombre_allumettes_max = max(liste_marienbad)
+    marge = 0
+
+    espacement_x = cfg.largeur_fenetre / (nombre_allumettes_max+1) - marge
+    x_max = (nombre_allumettes_max-1) * espacement_x + cfg.largeur_allumette
+    x_centre = (cfg.largeur_fenetre - x_max)/2
+    
+    espacement_y = cfg.hauteur_fenetre / (nb_rangees) - marge
+    y_max = (nb_rangees-1) * espacement_y + cfg.hauteur_fenetre
+    y_centre = (cfg.hauteur_fenetre - y_max)/2 + (cfg.hauteur_fenetre - cfg.hauteur_allumette)/2
+    
+    for j in range(0, nb_rangees):
+        ligne_allumettes = []
+        for i in range(0, liste_marienbad[j]):
+            ligne_allumettes.append(
+                Allumette(
+                    ax = i * espacement_x + x_centre,
+                    ay = j * espacement_y + y_centre,
+                    bx = i * espacement_x + x_centre + cfg.largeur_allumette,
+                    by = j * espacement_y + y_centre + cfg.hauteur_allumette
+                )
+            )
+        liste_allumettes.append(ligne_allumettes)
+
+    return liste_allumettes[0] # Pour libérer la puissance de cette ligne, rendez le jeu compatible Marienbad!
 
 
 def gen_lst_coup_possibles(k: int) -> list:
