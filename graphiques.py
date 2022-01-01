@@ -1,38 +1,17 @@
 import fltk
-from typing import List, Iterable, Optional
+from typing import List
 from gameplay import Allumette
 import gameplay
 import cfg
 
 
-def encadre(liste_allumettes: List[Allumette], selection: int, coup_possibles: List[int]):
-    """
-    Dessine un encadré autour des allumettes sélectionées
-    """
+def afficher_selection_allumettes(nombre_allumettes_a_selectionner: int, liste_allumettes: List[Allumette], rangee: int):
     
-    marge = 5
-
-    if gameplay.selection_possible(liste_allumettes, selection, coup_possibles):
-        encadrement = coup_possibles[selection]
-    else:
-        encadrement = 0
-
-    fltk.rectangle(
-        liste_allumettes[-encadrement].ax - marge, liste_allumettes[-encadrement].ay - marge,
-        liste_allumettes[-1].bx + marge, liste_allumettes[-1].by + marge,
-        couleur = "white"
-    )
-
-    for i in range(len(liste_allumettes)):
-        if i <= encadrement:
-            liste_allumettes[-i].selection = True
-        else:
-            liste_allumettes[-i].selection = False
-
-        if encadrement:
-            liste_allumettes[0].selection = False
-        else:
-            liste_allumettes[-i].selection = True
+    gameplay.reset_selection_rangee(liste_allumettes[rangee])
+    print('nombre_allumettes_a_selectionner', nombre_allumettes_a_selectionner)
+    
+    for i in range(len(liste_allumettes[rangee])-1, len(liste_allumettes[rangee])-nombre_allumettes_a_selectionner-1, -1):
+        liste_allumettes[rangee][i].selection = True
 
 
 def dessiner_allumettes(liste_allumettes: List[Allumette], image_allumette, image_allumette_brulee):
@@ -42,13 +21,14 @@ def dessiner_allumettes(liste_allumettes: List[Allumette], image_allumette, imag
     :param liste_allumettes: Liste d'objets ``Allumette``
     """
 
-    for allumette in liste_allumettes:
-        image = image_allumette_brulee if allumette.selection else image_allumette
-        fltk.afficher_image(
-            allumette.ax,
-            allumette.ay,
-            image, ancrage='nw'
-        )
+    for rangee in liste_allumettes:
+        for allumette in rangee:
+            image = image_allumette_brulee if allumette.selection else image_allumette
+            fltk.afficher_image(
+                allumette.ax,
+                allumette.ay,
+                image, ancrage='nw'
+            )
 
 
 def calcul_taille_image(taille_image: tuple, taille_box: tuple):

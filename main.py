@@ -21,15 +21,15 @@ def fin(joueur: int):
 def menu():
 
     liste_boutons_menu = [
-        bouton.cree_bouton(
+        bouton.cree_bouton_simple(
             0.2, 0.45, 0.8, 0.55,
             'Jeu normal'
         ),
-        bouton.cree_bouton(
+        bouton.cree_bouton_simple(
             0.2, 0.60, 0.8, 0.70,
-            'Jeu de Marienbad'
+            "Jeu de Marienbad"
         ),
-        bouton.cree_bouton(
+        bouton.cree_bouton_simple(
             0.2, 0.75, 0.8, 0.85,
             'Options'
         )
@@ -64,26 +64,22 @@ def menu():
 
 def jeu():
     # coup_possibles = gen_set_coup_possibles(cfg.k)
-    selection = 0
+    indice_coups_possibles = -1
     joueur = 1
-    coup_possibles = [1,2,4,5]
-    liste_allumettes = gameplay.initialiser_allumettes()
-    hitbox_allumettes = bouton.cree_bouton(
-        liste_allumettes[0].ax/cfg.largeur_fenetre,
-        liste_allumettes[0].ay/cfg.hauteur_fenetre,
-        liste_allumettes[-1].bx/cfg.largeur_fenetre,
-        liste_allumettes[-1].by/cfg.hauteur_fenetre,
-        '')
+    coups_possibles = [1,2,4,5]
+    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad=[1,3,5,7])
+
     liste_boutons_jeu = [
-        bouton.cree_bouton(
-            cfg.bouton_fdt_ax, cfg.bouton_fdt_ay, cfg.bouton_fdt_bx, cfg.bouton_fdt_by,
+        bouton.cree_bouton_simple(
+            0.3, 0.05, 0.7, 0.15,
             'Fin de tour'
         ),
-        bouton.cree_bouton(
-            cfg.bouton_cki_ax, cfg.bouton_cki_ay, cfg.bouton_cki_bx, cfg.bouton_cki_by,
-            "Joueur 1", hovered=False
+        bouton.cree_bouton_factice(
+            0.3, 0.85, 0.7, 0.95,
+            "Joueur 1"
         )
-    ]
+    ] + gameplay.hitbox_marienbad(liste_allumettes)
+
     coeff = graphiques.calcul_taille_image(
         cfg.taille_image,
         (cfg.largeur_allumette, cfg.hauteur_allumette)
@@ -99,6 +95,7 @@ def jeu():
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
+
             #fltk.ligne(cfg.largeur_fenetre/2, 0, cfg.largeur_fenetre/2, cfg.hauteur_fenetre)
 
             if tev == 'Quitte':
@@ -106,26 +103,30 @@ def jeu():
                 exit()
 
             elif tev == "ClicGauche":
-                if (bouton.curseur_sur_bouton(hitbox_allumettes)
-                and gameplay.selection_possible(liste_allumettes, selection, coup_possibles)):
-                    selection = gameplay.selectionCoups(selection, 1, coup_possibles)
+                indice_coups_possibles = gameplay.appliquer_selection_allumettes(
+                    indice_coups_possibles, 1, coups_possibles,
+                    liste_allumettes, nom_bouton
+                )
 
-                if nom_bouton == 'Fin de tour':
-                    gameplay.jouer_tour(selection, liste_allumettes, coup_possibles)
-                    bouton.intervertir_pos_boutons(liste_boutons_jeu[0], liste_boutons_jeu[1])
+                if nom_bouton == 'Fin de tour': # et vérifier si la selection a bien été effectuée?
+                    gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
-                    liste_boutons_jeu[1].texte = f"Joueur {joueur}"
-                    selection = 0
-                graphiques.encadre(liste_allumettes, selection, coup_possibles)
+                    liste_boutons_jeu[1].texte = f'Joueur {joueur}'
+                    indice_coups_possibles = -1
 
             elif tev == "ClicDroit":
-                if bouton.curseur_sur_bouton(hitbox_allumettes):
-                    selection = gameplay.selectionCoups(selection, -1, coup_possibles)
-                graphiques.encadre(liste_allumettes, selection, coup_possibles)
+                indice_coups_possibles = gameplay.appliquer_selection_allumettes(
+                    indice_coups_possibles, -1, coups_possibles,
+                    liste_allumettes, nom_bouton
+                )
 
-            if not gameplay.coup_possible(liste_allumettes, coup_possibles):
+            if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 2 - (joueur - 1)
-                return joueur
+                #return joueur
+                print("fin du jeu")
+            
+            if ev != None: # Mettre à jour la selection uniquement lors d'un évènement
+                print(f'Nom du bouton: {nom_bouton}\nValeur de rangee_actuelle: {nom_bouton}\nValeur de indice_coups_possibles: {indice_coups_possibles}')
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
             
@@ -136,58 +137,44 @@ def jeu():
 
 
 def options():
-    liste_boutons_option = [
-        bouton.cree_bouton(
+    liste_boutons_options = [
+        bouton.cree_bouton_booleen(
             0.2, 0.60, 0.8, 0.70,
-            'Mode misère'
+            'Mode',
+            cfg.misere,
+            'Mode misère', 'Mode normal'
         ),
-        bouton.cree_bouton(
+        bouton.cree_bouton_simple(
             0.2, 0.75, 0.8, 0.85,
             'Menu'
         )
     ]
-    liste_boutons_option[0].couleur_fond = '#cf0e0e'
-    liste_boutons_option[0].couleur_hovered = '#941010'
 
-    bouton.unifier_taille_texte(liste_boutons_option)
+    bouton.unifier_taille_texte(liste_boutons_options)
     while True:
         try:
             fltk.efface_tout()
-            fltk.rectangle(0, 0, cfg.largeur_fenetre, cfg.hauteur_fenetre, remplissage = "#3f3e47")
+            graphiques.background("#3f3e47")
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
 
-            nom_bouton = bouton.dessiner_boutons(liste_boutons_option)
+            nom_bouton = bouton.dessiner_boutons(liste_boutons_options)
 
             if tev == 'ClicGauche':
-                if nom_bouton == 'Mode misère':
-                    liste_boutons_option[0] = bouton.cree_bouton(
-                                            0.2, 0.60, 0.8, 0.70,
-                                            'Mode normal'
-                                        )
-                    liste_boutons_option[0].couleur_fond = '#0a8029'
-                    liste_boutons_option[0].couleur_hovered = '#0b4f34'
-                    cfg.misere = False
-
-                elif nom_bouton == 'Mode normal':
-                    liste_boutons_option[0] = bouton.cree_bouton(
-                                            0.2, 0.60, 0.8, 0.70,
-                                            'Mode misère'
-                                        )
-                    liste_boutons_option[0].couleur_fond = '#cf0e0e'
-                    liste_boutons_option[0].couleur_hovered = '#941010'
-                    cfg.misere = True
+                if nom_bouton == 'Mode':
+                    cfg.misere = not cfg.misere
+                    liste_boutons_options[0].etat = cfg.misere
 
                 if nom_bouton == 'Menu':
                     break
+
             if tev == 'Quitte' or tev == 'Touche' and fltk.touche(ev) == 'Escape':
                 break
 
-
             fltk.mise_a_jour()
+
         except KeyboardInterrupt:
             gameplay.message_interruption()
-            break
 
 
 if __name__ == "__main__":
