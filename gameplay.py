@@ -29,6 +29,8 @@ def appliquer_selection_allumettes(
     :param list coups_possibles: Liste représentant les coups possibles
     :param list liste_allumettes: Liste de rangées d'objets ``Allumette``s
     :param Union[int, str] rangee: Numéro de la rangée où la sélection sera réalisée
+
+    Supprimer les rangées vides de la liste_allumettes!!!!!
     """
 
     if (rangee != None and rangee.isnumeric()) or type(rangee) == int:

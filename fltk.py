@@ -476,7 +476,7 @@ def taille_texte(chaine, police='Helvetica', taille='24'):
         en pixels (int), dans la police et la taille données.
     """
     font = Font(family=police, size=taille)
-    return font.measure(chaine), font.metrics("linespace")
+    return list((font.measure(chaine), font.metrics("linespace")))
 
 
 #############################################################################

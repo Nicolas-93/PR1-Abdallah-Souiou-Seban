@@ -126,7 +126,9 @@ def cree_bouton_booleen(
     return bouton
 
 
-def cree_bouton_simple(ax: float, ay: float, bx: float, by: float, identificateur: str, hovered=True) -> BoutonSimple:
+def cree_bouton_simple(
+    ax: float, ay: float, bx: float, by: float, identificateur: str,
+    hovered=True, couleur_hovered='#848484') -> BoutonSimple:
     """
     Crée un bouton simple, c'est à dire survolable, à partir de positions relatives à la fenêtre
     ayant comme libellé et identificateur ``identificateur``.
@@ -139,6 +141,7 @@ def cree_bouton_simple(ax: float, ay: float, bx: float, by: float, identificateu
     :param float by: Ordonnée de b relative, entre 0 et 1 inclus
     :param str identificateur: Nom et libéllé du bouton
     :param bool hovered: Définit si le bouton doit changer de couleur lors de son survol
+    :param str couleur_hovered: Couleur à utiliser lors du survol
     :return Bouton: Objet Bouton
     """
     bouton = BoutonSimple(
@@ -150,6 +153,7 @@ def cree_bouton_simple(ax: float, ay: float, bx: float, by: float, identificateu
                 identificateur,
                 hovered
              )
+    bouton.couleur_hovered = couleur_hovered
     bouton.taille_texte = taille_texte_bouton(bouton)
     return bouton
 
@@ -158,7 +162,7 @@ def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
     """
     Unifie la taille des textes de chaque bouton de la ``liste_boutons``
     à la plus petite taille de texte rencontrée
-    
+
     :param list liste_boutons: Liste d'objets ``Bouton``
     """
 
@@ -262,12 +266,14 @@ def taille_texte_bouton(bouton: Union[BoutonSimple, BoutonBooleen]) -> int:
     hauteur_bouton = (bouton.by - bouton.ay)*bouton.marge_texte
     largeur_bouton = (bouton.bx - bouton.ax)*bouton.marge_texte
     taille_texte = 1
+
     
     while True:
         if type(bouton) == BoutonBooleen:
             largeur_hauteur = max(fltk.taille_texte(bouton.texte_actif, bouton.police, taille_texte), fltk.taille_texte(bouton.texte_desactive, bouton.police, taille_texte))
         else:
             largeur_hauteur = fltk.taille_texte(bouton.texte, bouton.police, taille_texte)
+
         if largeur_hauteur[0] > largeur_bouton or largeur_hauteur[1] > hauteur_bouton:
             break
         taille_texte += 1

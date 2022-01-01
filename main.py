@@ -16,7 +16,54 @@ def fin(joueur: int):
     """
     :param int joueur: Numéro du joueur
     """
-    print(f"Lol t'as perdu, Joueur {joueur}")
+    liste_boutons_fin = [
+        bouton.cree_bouton_simple(
+            0.1, 0.6, 0.45, 0.8,
+            "Menu",
+            couleur_hovered='#0b8a68'
+        ),
+        bouton.cree_bouton_simple(
+            0.55, 0.6, 0.9, 0.8,
+            "Quitter",
+            couleur_hovered='#c21532'
+        )  
+    ]
+    bouton.unifier_taille_texte(liste_boutons_fin)
+
+    if cfg.misere:
+        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+    else:
+        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la dernière allumette !\n:D"
+
+    while True:
+        try:
+            fltk.efface_tout()
+            graphiques.background("#3f3e47")
+
+            ev = fltk.donne_ev()
+            tev = fltk.type_ev(ev)
+
+            nom_bouton = bouton.dessiner_boutons(liste_boutons_fin)
+            fltk.texte(
+                cfg.largeur_fenetre/2, 0.2*cfg.hauteur_fenetre,
+                message, couleur= "white", ancrage='center', police='Biometric Joe', taille = 20
+            )
+
+            if tev == 'Quitte':
+                fltk.ferme_fenetre()
+                exit()
+
+            elif tev == "ClicGauche":
+                if nom_bouton == 'Menu':
+                    menu()
+                if nom_bouton == 'Quitter':
+                    fltk.ferme_fenetre()
+                    exit()
+
+            fltk.mise_a_jour()
+
+        except KeyboardInterrupt:
+            gameplay.message_interruption()
 
 def menu():
 
@@ -122,8 +169,7 @@ def jeu():
 
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 2 - (joueur - 1)
-                #return joueur
-                print("fin du jeu")
+                return joueur
             
             if ev != None: # Mettre à jour la selection uniquement lors d'un évènement
                 print(f'Nom du bouton: {nom_bouton}\nValeur de rangee_actuelle: {nom_bouton}\nValeur de indice_coups_possibles: {indice_coups_possibles}')
