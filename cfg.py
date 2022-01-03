@@ -4,13 +4,13 @@ import fltk
 largeur_fenetre, hauteur_fenetre = 500,500
 nombre_allumettes = 10
 misere = True
+coups_possibles = [1,2,4,5]
+liste_marienbad=[1,3,5,7]
 
 zoom_allumette = 0.5
-
-misere = True
-
 taille_image = fltk.taille_image('allumette.png')
-largeur_allumette, hauteur_allumette = zoom_allumette*(0.00015*largeur_fenetre)*taille_image[0], (zoom_allumette*0.00015*hauteur_fenetre)*taille_image[1]
+largeur_allumette = zoom_allumette*0.00015*largeur_fenetre*taille_image[0]
+hauteur_allumette = zoom_allumette*0.00015*hauteur_fenetre*taille_image[1]
 rayon_cercle_allumette = largeur_allumette*0.70
 
 marge = 10

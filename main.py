@@ -26,7 +26,7 @@ def fin(joueur: int):
             0.55, 0.6, 0.9, 0.8,
             "Quitter",
             couleur_hovered='#c21532'
-        )  
+        )
     ]
     bouton.unifier_taille_texte(liste_boutons_fin)
 
@@ -99,7 +99,9 @@ def menu():
 
             elif tev == "ClicGauche":
                 if nom_bouton == 'Jeu normal':
-                    fin(jeu())
+                    fin(jeu([cfg.nombre_allumettes]))
+                if nom_bouton == 'Jeu de Marienbad':
+                    fin(jeu(cfg.liste_marienbad))
                 if nom_bouton == 'Options':
                     options()
 
@@ -109,12 +111,12 @@ def menu():
             gameplay.message_interruption()
 
 
-def jeu():
+def jeu(liste_marienbad):
     # coup_possibles = gen_set_coup_possibles(cfg.k)
+    bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
-    coups_possibles = [1,2,4,5]
-    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad=[1,3,5,7])
+    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
 
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
@@ -150,30 +152,32 @@ def jeu():
                 exit()
 
             elif tev == "ClicGauche":
+                indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                    indice_coups_possibles, 1, coups_possibles,
+                    indice_coups_possibles, 1, cfg.coups_possibles,
                     liste_allumettes, nom_bouton
                 )
 
-                if nom_bouton == 'Fin de tour': # et vérifier si la selection a bien été effectuée?
+                if nom_bouton == 'Fin de tour' and indice_coups_possibles != -1: # et vérifier si la selection a bien été effectuée?
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
                     indice_coups_possibles = -1
 
             elif tev == "ClicDroit":
+                indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                    indice_coups_possibles, -1, coups_possibles,
+                    indice_coups_possibles, -1, cfg.coups_possibles,
                     liste_allumettes, nom_bouton
                 )
 
-            if not gameplay.coup_possible(liste_allumettes, coups_possibles):
+            if not gameplay.coup_possible(liste_allumettes, cfg.coups_possibles):
                 joueur = 2 - (joueur - 1)
                 return joueur
 
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
-            
+
             fltk.mise_a_jour()
 
         except KeyboardInterrupt:
@@ -182,6 +186,26 @@ def jeu():
 
 def options():
     liste_boutons_options = [
+        bouton.cree_bouton_simple(
+            0.2, 0.45, 0.35, 0.55,
+            '-10',
+            cfg.misere
+        ),
+        bouton.cree_bouton_simple(
+            0.4, 0.45, 0.5, 0.55,
+            '-1',
+            cfg.misere
+        ),
+        bouton.cree_bouton_simple(
+            0.5, 0.45, 0.6, 0.55,
+            '+1',
+            cfg.misere
+        ),
+        bouton.cree_bouton_simple(
+            0.65, 0.45, 0.8, 0.55,
+            '+10',
+            cfg.misere
+        ),
         bouton.cree_bouton_booleen(
             0.2, 0.60, 0.8, 0.70,
             'Mode',
@@ -193,6 +217,11 @@ def options():
             'Menu'
         )
     ]
+
+    liste_boutons_options[0].police = "Arial"
+    liste_boutons_options[1].police = "Arial"
+    liste_boutons_options[2].police = "Arial"
+    liste_boutons_options[3].police = "Arial"
 
     bouton.unifier_taille_texte(liste_boutons_options)
     while True:

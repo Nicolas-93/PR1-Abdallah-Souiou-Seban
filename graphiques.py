@@ -11,7 +11,6 @@ def afficher_selection_allumettes(nombre_allumettes_a_selectionner: int, liste_a
     """
 
     gameplay.reset_selection_rangee(liste_allumettes[rangee])
-    print('nombre_allumettes_a_selectionner', nombre_allumettes_a_selectionner)
     
     for i in range(len(liste_allumettes[rangee])-1, len(liste_allumettes[rangee])-nombre_allumettes_a_selectionner-1, -1):
         liste_allumettes[rangee][i].selection = True
