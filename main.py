@@ -16,7 +16,6 @@ import cfg
 # Effet de disparition des allumettes: les allumer!!
 
 
-
 def menu():
 
     liste_boutons_menu = [
