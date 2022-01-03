@@ -215,7 +215,8 @@ def dessiner_bouton(bouton: Bouton) -> bool:
         )   
         fltk.texte(
             (bouton.ax + bouton.bx)/2, (bouton.ay + bouton.by)/2,
-            (bouton.texte_actif if bouton.etat else bouton.texte_desactive) if type(bouton) == BoutonBooleen else bouton.texte,
+            (bouton.texte_actif if bouton.etat else bouton.texte_desactive)
+            if type(bouton) == BoutonBooleen else bouton.texte,
             bouton.couleur_texte, 'center',
             bouton.police, bouton.taille_texte
         )

@@ -4,13 +4,13 @@ import gameplay
 import bouton
 import cfg
 
-# Gérer le mode misère/normal
 # Mode joueur solo
 # Ajuster/Zoomer les allumettes de manière à optimiser l'espace disponible
 # Animer le menu avec des allumettes se déplaçant en diagonale
 # Chute d'allumettes
 # Effet de disparition des allumettes: les allumer!!
 # Mettre un beau message en cas de valeurs incohérentes (minimum 30 pages) :)
+# README
 
 def fin(joueur: int):
     """

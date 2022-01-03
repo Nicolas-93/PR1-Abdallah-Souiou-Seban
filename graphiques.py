@@ -6,6 +6,9 @@ import cfg
 
 
 def afficher_selection_allumettes(nombre_allumettes_a_selectionner: int, liste_allumettes: List[Allumette], rangee: int):
+    """
+    
+    """
 
     gameplay.reset_selection_rangee(liste_allumettes[rangee])
     print('nombre_allumettes_a_selectionner', nombre_allumettes_a_selectionner)
