@@ -1,6 +1,7 @@
-from typing import List, Union
+from typing import List, Union, Tuple
 from dataclasses import dataclass
 import bouton
+from bouton import Bouton
 import cfg
 import graphiques
 
@@ -15,25 +16,24 @@ class Allumette:
 
 def appliquer_selection_allumettes(
     indice_coups_possibles: int, increment_clic: int, coups_possibles: list,
-    liste_allumettes: List[List[Allumette]], rangee: Union[int, str]):
+    liste_allumettes: List[List[Allumette]], rangee: str):
 
     """
     Sélectionne les allumettes en fonction de la valeur de ``indice_coups_possibles`` qui représente
     le curseur de la liste des coups possibles ``coups_possibles``. Ce curseur est dé/incrémenté dans les
     limites de la liste ``coups_possibles`` mais aussi dans la limite des allumettes restantes
     dans la rangée ``rangee`` demandée.
-    ~~Permet la déselection des allumettes~~ 
 
     :param int indice_coups_possibles: Curseur/indice par rapport à la liste ``coups_possibles``
     :param int increment_clic: Incrémentation +/- 1
     :param list coups_possibles: Liste représentant les coups possibles
     :param list liste_allumettes: Liste de rangées d'objets ``Allumette``s
-    :param Union[int, str] rangee: Numéro de la rangée où la sélection sera réalisée
+    :param str rangee: Numéro de la rangée où la sélection sera réalisée
 
     Supprimer les rangées vides de la liste_allumettes!!!!!
     """
 
-    if (rangee != None and rangee.isnumeric()) or type(rangee) == int:
+    if (rangee != None and rangee.isnumeric()):
         rangee = int(rangee)
 
         # Déterminer si l'indice de la selection demandé peut devenir valable avec l'increment du clic (+-1)
@@ -43,11 +43,10 @@ def appliquer_selection_allumettes(
             indice_coups_possibles += increment_clic
             nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
 
-        elif increment_clic == -1 and indice_coups_possibles == -1: # ~~in {0,-1}~~
+        elif increment_clic == -1 and indice_coups_possibles == -1:
             nombre_allumettes_a_selectionner = 0
         
         else:
-
             nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
         
         graphiques.afficher_selection_allumettes(nombre_allumettes_a_selectionner, liste_allumettes, rangee)
@@ -69,18 +68,32 @@ def reset_selection_rangee(liste_rangee: list) -> None:
     return None
 
 
-def jouer_tour(liste_allumettes, liste_boutons_jeu):
+def jouer_tour(liste_allumettes: List[List[Allumette]], liste_boutons_jeu: List[Bouton]):
+    """
+    Supprime les allumettes selctionées dans la liste d'allumettes,
+    et inverse la position des boutons 'Joueur' et 'Fin de tour'
+    aux indices 0 et 1 de la liste_boutons_jeu
+
+    :param list liste_allumettes: Liste de rangées d'objets ``Allumette``s
+    :param list liste_boutons_jeu: Liste d'objets ``Boutons``s
+    """
 
     bouton.intervertir_pos_boutons(liste_boutons_jeu[0], liste_boutons_jeu[1])
+    break_rangee = False
 
     for rangee in range(len(liste_allumettes)-1, -1, -1):
         for allumette in range(len(liste_allumettes[rangee])-1, -1, -1):
 
             if liste_allumettes[rangee][allumette].selection:
+                break_rangee = True
                 del liste_allumettes[rangee][allumette]
+            else:
+                break
+        if break_rangee:
+            break
 
 
-def hitbox_marienbad(liste_allumettes: List[List[Allumette]]):
+def hitbox_marienbad(liste_allumettes: List[List[Allumette]]) -> List[Bouton]:
     """
     Crée un bouton pour chaque rangée de la ``liste_allumettes``, le texte de chaque bouton
     est le numéro de la rangée (Débute à 0).
@@ -102,7 +115,11 @@ def hitbox_marienbad(liste_allumettes: List[List[Allumette]]):
     
     return hitbox_allumettes
 
-def check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev):
+def check_hitbox(nom_bouton: str, liste_allumettes: List[List[Allumette]],
+                 indice_coups_possibles: int, bouton_precedent: str, tev: str) -> Tuple[int, str]:
+    """
+    Gère la logique liée à la selection et les appuis sur les boutons correspondants
+    """
     if tev == "ClicDroit":
         retour = 0
     else:
@@ -117,7 +134,7 @@ def check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_pr
     return indice_coups_possibles, bouton_precedent        
         
 
-def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[Allumette]: # Avec support du jeu de marienbad
+def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[List[Allumette]]:
     """
     Initialise une liste d'objets ``Allumette``, dont les coordonnées
     ont été adaptées à la taille de la fenêtre par leurs constantes globales

@@ -28,7 +28,7 @@ class BoutonTexte(Bouton): # Longue vie aux héritages de dataclasses!!
 
 @dataclass
 class BoutonSimple(BoutonTexte):
-    enable_hovered: bool
+    enable_hovered = True
     couleur_hovered = '#848484'
 
 @dataclass
@@ -42,10 +42,11 @@ class BoutonBooleen(BoutonTexte):
     couleur_hovered_desactive = '#941010'
 
 
-def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificateur: str):
+def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificateur: str) -> BoutonTexte:
     """
-    Crée un bouton factice à partir de positions relatives à la fenêtre,
-    avec comme identificateur : ``identificateur``. Le libéllé du bouton sera
+    Crée un bouton factice (ne change pas de couleur lors de son survol)
+    à partir de positions relatives à la fenêtre, avec comme
+    identificateur : ``identificateur``. Le libéllé du bouton sera
     celui de l'identificateur.
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
 
@@ -54,6 +55,12 @@ def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificate
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
     :param float by: Ordonnée de b relative, entre 0 et 1 inclus
     :param str identificateur: Nom du bouton
+    :param bool hovered: Optionnel, détermine si le bouton change de couleur lors
+    de son survol. Par défaut: ``True``
+    :param str couleur_hovered: Optionnel, couleur du fond du bouton lors de son survol par la souris.
+    Par défaut: ``'#848484'``
+    :param str police: Optionnel, nom de la typographie à utiliser pour le texte du bouton.
+    Par défaut, ``'Biometric Joe'``
     :return: Objet Bouton factice
     """
     bouton = BoutonTexte(
@@ -89,12 +96,13 @@ def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float, identifica
                 identificateur,
              )
     bouton.invisible=True
+
     return bouton
 
 
 def cree_bouton_booleen(
         ax: float, ay: float, bx: float, by: float, identificateur: str, etat: bool,
-        texte_actif: str, texte_desactive: str) -> BoutonBooleen:
+        texte_actif: str, texte_desactive: str, **kwargs) -> BoutonBooleen:
     """
     Crée un bouton booléen à partir de positions relatives à la fenêtre, et l'initialise
     à la valeur du booléen ``etat``.
@@ -122,13 +130,14 @@ def cree_bouton_booleen(
                 texte_actif,
                 texte_desactive,
              )
+    parse_optionnal_args(kwargs, bouton)
     bouton.taille_texte = taille_texte_bouton(bouton)
+
     return bouton
 
 
 def cree_bouton_simple(
-    ax: float, ay: float, bx: float, by: float, identificateur: str,
-    hovered=True, couleur_hovered='#848484') -> BoutonSimple:
+    ax: float, ay: float, bx: float, by: float, identificateur: str, **kwargs) -> BoutonSimple: #couleur_hovered='#848484', police='XXXXXXXX'
     """
     Crée un bouton simple, c'est à dire survolable, à partir de positions relatives à la fenêtre
     ayant comme libellé et identificateur ``identificateur``.
@@ -140,8 +149,12 @@ def cree_bouton_simple(
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
     :param float by: Ordonnée de b relative, entre 0 et 1 inclus
     :param str identificateur: Nom et libéllé du bouton
-    :param bool hovered: Définit si le bouton doit changer de couleur lors de son survol
-    :param str couleur_hovered: Couleur à utiliser lors du survol
+    :param bool hovered: Optionnel, détermine si le bouton change de couleur lors
+    de son survol. Par défaut: ``True``
+    :param str couleur_hovered: Optionnel, couleur du fond du bouton lors de son survol par la souris.
+    Par défaut: ``'#848484'``
+    :param str police: Optionnel, nom de la typographie à utiliser pour le texte du bouton.
+    Par défaut, ``'Biometric Joe'``
     :return Bouton: Objet Bouton
     """
     bouton = BoutonSimple(
@@ -150,12 +163,36 @@ def cree_bouton_simple(
                 bx*cfg.largeur_fenetre,
                 by*cfg.hauteur_fenetre,
                 identificateur,
-                identificateur,
-                hovered
+                identificateur
              )
-    bouton.couleur_hovered = couleur_hovered
+    parse_optionnal_args(kwargs, bouton)
+
     bouton.taille_texte = taille_texte_bouton(bouton)
+
     return bouton
+
+
+def parse_optionnal_args(args: dict, bouton):
+    """
+    Parsing (j'aime pas le franglais) des arguments optionnels pour les fonctions
+    cree_bouton_simple() et cree_bouton_factice()
+    """
+
+    for arg, value in args.items():
+        if type(bouton) == BoutonSimple:
+            if arg == 'hovered':
+                bouton.enable_hovered = value
+                break
+            elif arg == 'couleur_hovered':
+                bouton.couleur_hovered = value
+                break
+
+        if arg == 'police':
+            bouton.police = value
+
+        else:
+            raise KeyError(f"L'argument {arg} n'existe pas, ou le bouton de \
+                           type {type(bouton)} ne possède pas la propriété {arg}")
 
 
 def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
