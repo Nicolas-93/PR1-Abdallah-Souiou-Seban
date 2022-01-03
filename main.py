@@ -187,33 +187,37 @@ def jeu(liste_marienbad):
 def options():
     liste_boutons_options = [
         bouton.cree_bouton_simple(
-            0.2, 0.45, 0.35, 0.55,
-            '-10',
-            cfg.misere
+            0.05, 0.45, 0.2, 0.55,
+            '-10'
         ),
         bouton.cree_bouton_simple(
-            0.4, 0.45, 0.5, 0.55,
-            '-1',
-            cfg.misere
+            0.25, 0.45, 0.35, 0.55,
+            '-1'
+        ),
+        bouton.cree_bouton_factice(
+            0.4, 0.45, 0.6, 0.55,
+            cfg.nombre_allumettes
         ),
         bouton.cree_bouton_simple(
-            0.5, 0.45, 0.6, 0.55,
-            '+1',
-            cfg.misere
+            0.65, 0.45, 0.75, 0.55,
+            '+1'
         ),
         bouton.cree_bouton_simple(
-            0.65, 0.45, 0.8, 0.55,
-            '+10',
-            cfg.misere
+            0.8, 0.45, 0.95, 0.55,
+            '+10'
+        ),
+        bouton.cree_bouton_factice(
+            0.05, 0.30, 0.95, 0.40,
+            "Nombre d'allumettes"
         ),
         bouton.cree_bouton_booleen(
-            0.2, 0.60, 0.8, 0.70,
+            0.05, 0.60, 0.95, 0.70,
             'Mode',
             cfg.misere,
             'Mode misère', 'Mode normal'
         ),
         bouton.cree_bouton_simple(
-            0.2, 0.75, 0.8, 0.85,
+            0.05, 0.75, 0.95, 0.85,
             'Menu'
         )
     ]
@@ -222,6 +226,7 @@ def options():
     liste_boutons_options[1].police = "Arial"
     liste_boutons_options[2].police = "Arial"
     liste_boutons_options[3].police = "Arial"
+    liste_boutons_options[4].police = "Arial"
 
     bouton.unifier_taille_texte(liste_boutons_options)
     while True:
@@ -236,7 +241,17 @@ def options():
             if tev == 'ClicGauche':
                 if nom_bouton == 'Mode':
                     cfg.misere = not cfg.misere
-                    liste_boutons_options[0].etat = cfg.misere
+                    liste_boutons_options[6].etat = cfg.misere
+
+                if nom_bouton == '-10':
+                    cfg.nombre_allumettes -= 10
+                if nom_bouton == '-1':
+                    cfg.nombre_allumettes -= 1
+                if nom_bouton == '+1':
+                    cfg.nombre_allumettes += 1
+                if nom_bouton == '+10':
+                    cfg.nombre_allumettes += 10
+                liste_boutons_options[2].texte = cfg.nombre_allumettes
 
                 if nom_bouton == 'Menu':
                     break
