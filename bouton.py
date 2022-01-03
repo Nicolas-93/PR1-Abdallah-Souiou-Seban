@@ -48,7 +48,7 @@ def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificate
     avec comme identificateur : ``identificateur``. Le libéllé du bouton sera
     celui de l'identificateur.
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
-    
+
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
     :param float ay: Ordonnée de a relative, entre 0 et 1 inclus
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
@@ -73,7 +73,7 @@ def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float, identifica
     Crée un bouton invisible à partir de positions relatives à la fenêtre,
     avec comme identificateur : ``identificateur``
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
-    
+
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
     :param float ay: Ordonnée de a relative, entre 0 et 1 inclus
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
@@ -101,7 +101,7 @@ def cree_bouton_booleen(
     Le libellé du bouton sera ``texte_actif`` lorsque l'attribut ``etat`` du bouton vaut ``True``,
     sinon le libellé ``texte_desactive``.
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
-    
+
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
     :param float ay: Ordonnée de a relative, entre 0 et 1 inclus
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
@@ -134,7 +134,7 @@ def cree_bouton_simple(
     ayant comme libellé et identificateur ``identificateur``.
     Le paramètre ``hovered`` détermine si le bouton devra changer de couleur à son survol.
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
-    
+
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
     :param float ay: Ordonnée de a relative, entre 0 et 1 inclus
     :param float bx: Abscisse de b relative, entre 0 et 1 inclus
@@ -170,11 +170,11 @@ def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
     for bouton in liste_boutons:
         if not bouton.invisible and (bouton.taille_texte < taille_min):
             taille_min = bouton.taille_texte
-    
+
     for bouton in liste_boutons:
         if not bouton.invisible:
             bouton.taille_texte = taille_min
-    
+
     return None
 
 
@@ -187,7 +187,7 @@ def dessiner_bouton(bouton: Bouton) -> bool:
     :param Bouton bouton: Objet Bouton
     :return bool: Bouton survolé
     """
-    
+
     survole = curseur_sur_bouton(bouton)
     if not bouton.invisible:
         if type(bouton) == BoutonBooleen:
@@ -212,10 +212,11 @@ def dessiner_bouton(bouton: Bouton) -> bool:
             bouton.bx, bouton.by,
             'black',
             remplissage
-        )   
+        )
         fltk.texte(
             (bouton.ax + bouton.bx)/2, (bouton.ay + bouton.by)/2,
-            (bouton.texte_actif if bouton.etat else bouton.texte_desactive) if type(bouton) == BoutonBooleen else bouton.texte,
+            (bouton.texte_actif if bouton.etat else bouton.texte_desactive)
+            if type(bouton) == BoutonBooleen else bouton.texte,
             bouton.couleur_texte, 'center',
             bouton.police, bouton.taille_texte
         )
@@ -229,16 +230,16 @@ def dessiner_boutons(liste_boutons: List[Bouton]) -> str:
     d'un bouton si celui-ci est survolé, et ``None`` si aucun ne l'a été.
 
     :param list liste_boutons: liste d'objets boutons
-    :return str: Texte du bouton qui a été survolé 
+    :return str: Texte du bouton qui a été survolé
     """
-    
+
     nom_bouton_survole = None
 
     for bouton in liste_boutons:
         survole = dessiner_bouton(bouton)
         if survole:
             nom_bouton_survole = bouton.identificateur
-    
+
     return nom_bouton_survole
 
 
@@ -267,7 +268,7 @@ def taille_texte_bouton(bouton: Union[BoutonSimple, BoutonBooleen]) -> int:
     largeur_bouton = (bouton.bx - bouton.ax)*bouton.marge_texte
     taille_texte = 1
 
-    
+
     while True:
         if type(bouton) == BoutonBooleen:
             largeur_hauteur = max(fltk.taille_texte(bouton.texte_actif, bouton.police, taille_texte), fltk.taille_texte(bouton.texte_desactive, bouton.police, taille_texte))
