@@ -3,6 +3,7 @@ import graphiques
 import gameplay
 import bouton
 import cfg
+import animation
 
 # Gérer le mode misère/normal
 # Mode joueur solo
@@ -13,6 +14,7 @@ import cfg
 # Mettre un beau message en cas de valeurs incohérentes (minimum 30 pages) :)
 
 def fin(joueur: int):
+    global image_allumette, image_allumette_brulee, liste_chute	
     """
     :param int joueur: Numéro du joueur
     """
@@ -39,6 +41,7 @@ def fin(joueur: int):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
+            animation.dessiner(liste_chute)
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -66,6 +69,12 @@ def fin(joueur: int):
             gameplay.message_interruption()
 
 def menu():
+    global image_allumette, image_allumette_brulee, liste_chute
+
+    image_allumette = fltk.redimensionner_image('allumette.png', 0.05)
+    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', 0.05)
+
+    liste_chute = animation.initialisation(20, image_allumette, image_allumette_brulee)
 
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
@@ -87,6 +96,7 @@ def menu():
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
+            animation.dessiner(liste_chute) 
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -133,8 +143,6 @@ def jeu(liste_marienbad):
         cfg.taille_image,
         (cfg.largeur_allumette, cfg.hauteur_allumette)
     )
-    image_allumette = fltk.redimensionner_image('allumette.png', coeff)
-    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', coeff)
 
     while True:
         try:
