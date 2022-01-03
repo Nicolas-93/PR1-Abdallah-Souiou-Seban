@@ -5,9 +5,10 @@ import gameplay
 import cfg
 
 
-def afficher_selection_allumettes(nombre_allumettes_a_selectionner: int, liste_allumettes: List[Allumette], rangee: int):
+def afficher_selection_allumettes(nombre_allumettes_a_selectionner: int,
+                                  liste_allumettes: List[Allumette], rangee: int):
     """
-    
+    Met à jour la selection des allumettes
     """
 
     gameplay.reset_selection_rangee(liste_allumettes[rangee])
@@ -45,6 +46,11 @@ def calcul_taille_image(taille_image: tuple, taille_box: tuple):
 
 
 def background(couleur: str) -> None:
+    """
+    Crée un arrière plan uni
+
+    :param str couleur: Couleur du fond
+    """
     
     fltk.rectangle(
         0, 0,
