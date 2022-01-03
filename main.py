@@ -33,7 +33,7 @@ def fin(joueur: int):
     if cfg.misere:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
     else:
-        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la dernière allumette !\n:D"
+        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\ndernière allumette !\n:D"
 
     while True:
         try:
@@ -170,9 +170,7 @@ def jeu():
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 2 - (joueur - 1)
                 return joueur
-            
-            if ev != None: # Mettre à jour la selection uniquement lors d'un évènement
-                print(f'Nom du bouton: {nom_bouton}\nValeur de rangee_actuelle: {nom_bouton}\nValeur de indice_coups_possibles: {indice_coups_possibles}')
+
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
             
