@@ -113,6 +113,7 @@ def menu():
 
 def jeu(liste_marienbad):
     # coup_possibles = gen_set_coup_possibles(cfg.k)
+    bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
@@ -151,6 +152,7 @@ def jeu(liste_marienbad):
                 exit()
 
             elif tev == "ClicGauche":
+                indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     indice_coups_possibles, 1, cfg.coups_possibles,
                     liste_allumettes, nom_bouton
@@ -163,6 +165,7 @@ def jeu(liste_marienbad):
                     indice_coups_possibles = -1
 
             elif tev == "ClicDroit":
+                indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     indice_coups_possibles, -1, cfg.coups_possibles,
                     liste_allumettes, nom_bouton

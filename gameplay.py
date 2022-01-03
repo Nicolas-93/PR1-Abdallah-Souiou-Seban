@@ -102,6 +102,20 @@ def hitbox_marienbad(liste_allumettes: List[List[Allumette]]):
     
     return hitbox_allumettes
 
+def check_hitbox(nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev):
+    if tev == "ClicDroit":
+        retour = 0
+    else:
+        retour = -1
+
+    if nom_bouton != None and nom_bouton.isnumeric():
+        if bouton_precedent != None:
+            if bouton_precedent != nom_bouton:
+                reset_selection_rangee(liste_allumettes[int(bouton_precedent)])
+                return retour, nom_bouton
+        return indice_coups_possibles, nom_bouton
+    return indice_coups_possibles, bouton_precedent        
+        
 
 def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[Allumette]: # Avec support du jeu de marienbad
     """
