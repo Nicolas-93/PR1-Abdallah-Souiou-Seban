@@ -158,7 +158,7 @@ def jeu(liste_marienbad):
                     liste_allumettes, nom_bouton
                 )
 
-                if nom_bouton == 'Fin de tour': # et vérifier si la selection a bien été effectuée?
+                if nom_bouton == 'Fin de tour' and indice_coups_possibles != -1: # et vérifier si la selection a bien été effectuée?
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
