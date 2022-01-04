@@ -215,24 +215,24 @@ def options():
         ),
         bouton.cree_bouton_factice(
             0.05, 0.30, 0.95, 0.40,
-            "Nombre d'allumettes :"
+            "Nombre d'allumettes"
         ),
         bouton.cree_bouton_simple(
             0.05, 0.45, 0.2, 0.55,
-            '-10'
+            '-10', police='Arial'
         ),
         bouton.cree_bouton_simple(
             0.25, 0.45, 0.35, 0.55,
-            '-1'
+            '-1', police='Arial'
         ),
         bouton.cree_bouton_simple(
             0.65, 0.45, 0.75, 0.55,
-            '+1'
+            '+1', police='Arial'
         ),
         bouton.cree_bouton_simple(
             0.8, 0.45, 0.95, 0.55,
-            '+10'
-        )
+            '+10', police='Arial'
+        ),
     ]
 
     bouton.unifier_taille_texte(liste_boutons_options)
@@ -258,6 +258,7 @@ def options():
                     cfg.nombre_allumettes += 1
                 if nom_bouton == '+10':
                     cfg.nombre_allumettes += 10
+
                 cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
 
                 liste_boutons_options[1].texte = cfg.nombre_allumettes
