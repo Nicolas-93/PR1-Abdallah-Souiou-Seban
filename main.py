@@ -177,7 +177,7 @@ def jeu(liste_marienbad):
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
-                    if liste_boutons_jeu[1].texte == "Joueur 2" and cfg.mode_solo:
+                    if joueur == 2 and cfg.mode_solo:
                         liste_boutons_jeu[1].texte = "3X-PL0-X10N"
                     indice_coups_possibles = -1
 
@@ -193,7 +193,7 @@ def jeu(liste_marienbad):
             if cfg.mode_solo and joueur == 2:
                 if cfg.mode_difficile:
                     coup = coups_gagnants[len(liste_allumettes[0])]
-                else:
+                elif len(liste_allumettes[0]) > 0:
                     coup = random.randint(0, min(len(cfg.coups_possibles), len(liste_allumettes[0])) - 1)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     coup, 0, cfg.coups_possibles,
