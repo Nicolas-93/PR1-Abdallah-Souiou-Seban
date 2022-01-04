@@ -21,10 +21,7 @@ import random
 def menu():
     global image_allumette, image_allumette_brulee, liste_chute
 
-    image_allumette = fltk.redimensionner_image('allumette.png', 0.05)
-    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', 0.05)
-
-    liste_chute = animation.initialisation(20, image_allumette, image_allumette_brulee)
+    liste_chute = animation.initialisation(20)
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
             0.2, 0.45, 0.8, 0.55,
@@ -128,6 +125,9 @@ def fin(joueur: int):
 
 def jeu(liste_marienbad):
     # coup_possibles = gen_set_coup_possibles(cfg.k)
+    image_allumette = fltk.redimensionner_image('allumette.png', 0.05)
+    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', 0.05)
+
     bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
