@@ -14,15 +14,11 @@ class Image:
 def initialisation(number, image, image2):
     liste = []
     for i in range(number+1):
-        j = random.randint(1,2)
-        if j == 1:
-            imagechute = image
-        else:
-            imagechute = image2
+        imagechute = image if bool(random.getrandbits(1)) else image2
         liste.append(
             Image(
-                ax = random.randint(0, 500),
-                ay = random.randint(-50, 0),
+                ax = random.randint(0, cfg.largeur_fenetre),
+                ay = random.randint(int(-cfg.hauteur_fenetre*cfg.hauteur_allumette), 0),
                 Image = imagechute,
                 speed = random.randint(4,15)
             )
@@ -30,12 +26,12 @@ def initialisation(number, image, image2):
     return liste
 
 def chute(liste):
-    for i in liste:
-        i.ay += i.speed
-        i.ay = i.ay % 600
+    for img in liste:
+        img.ay += img.speed
+        img.ay = img.ay % 600
 
 def dessiner(liste):
-    for i in liste:
-        fltk.afficher_image(i.ax, i.ay, i.Image, ancrage='s')
+    for img in liste:
+        fltk.afficher_image(img.ax, img.ay, img.Image, ancrage='s')
     chute(liste)
 

@@ -18,9 +18,13 @@ import animation
 
 def menu():
     global image_allumette, image_allumette_brulee, liste_chute
+    coeff = graphiques.calcul_taille_image(
+        cfg.taille_image,
+        (cfg.largeur_allumette, cfg.hauteur_allumette)
+    )
 
-    image_allumette = fltk.redimensionner_image('allumette.png', 0.05)
-    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', 0.05)
+    image_allumette = fltk.redimensionner_image(cfg.image_allumette, coeff)
+    image_allumette_brulee = fltk.redimensionner_image(cfg.image_allumette_brulee, coeff)
 
     liste_chute = animation.initialisation(20, image_allumette, image_allumette_brulee)
     liste_boutons_menu = [
@@ -43,7 +47,8 @@ def menu():
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
-            animation.dessiner(liste_chute)
+            if cfg.animation:
+                animation.dessiner(liste_chute) 
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -96,7 +101,8 @@ def fin(joueur: int):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
-            animation.dessiner(liste_chute) 
+            if cfg.animation:
+                animation.dessiner(liste_chute) 
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -200,22 +206,17 @@ def jeu(liste_marienbad):
 def options():
     liste_boutons_options = [
         bouton.cree_bouton_booleen(
-            0.05, 0.60, 0.95, 0.70,
-            'Mode',
-            cfg.misere,
-            'Mode misère', 'Mode normal'
-        ),
-        bouton.cree_bouton_factice(
-            0.4, 0.45, 0.6, 0.55,
-            cfg.nombre_allumettes
-        ),
-        bouton.cree_bouton_simple(
-            0.05, 0.75, 0.95, 0.85,
-            'Menu'
+            0.05, 0.15, 0.225, 0.25,
+            'Animation', cfg.animation,
+            'Animé', 'Non animé', unifier_texte=False
         ),
         bouton.cree_bouton_factice(
             0.05, 0.30, 0.95, 0.40,
-            "Nombre d'allumettes"
+            "Nombre d'allumettes :"
+        ),
+        bouton.cree_bouton_factice(
+            0.4, 0.45, 0.6, 0.55,
+            cfg.nombre_allumettes, police='Arial'
         ),
         bouton.cree_bouton_simple(
             0.05, 0.45, 0.2, 0.55,
@@ -233,6 +234,15 @@ def options():
             0.8, 0.45, 0.95, 0.55,
             '+10', police='Arial'
         ),
+        bouton.cree_bouton_booleen(
+            0.05, 0.60, 0.95, 0.70,
+            'Mode', cfg.misere,
+            'Mode misère', 'Mode normal'
+        ),
+        bouton.cree_bouton_simple(
+            0.05, 0.75, 0.95, 0.85,
+            'Menu'
+        )
     ]
 
     bouton.unifier_taille_texte(liste_boutons_options)
@@ -248,7 +258,7 @@ def options():
             if tev == 'ClicGauche':
                 if nom_bouton == 'Mode':
                     cfg.misere = not cfg.misere
-                    liste_boutons_options[0].etat = cfg.misere
+                    liste_boutons_options[7].etat = cfg.misere
 
                 if nom_bouton == '-10':
                     cfg.nombre_allumettes -= 10
@@ -258,10 +268,13 @@ def options():
                     cfg.nombre_allumettes += 1
                 if nom_bouton == '+10':
                     cfg.nombre_allumettes += 10
+                if nom_bouton == 'Animation':
+                    cfg.animation = not cfg.animation
+                    liste_boutons_options[0].etat = cfg.animation
 
                 cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
 
-                liste_boutons_options[1].texte = cfg.nombre_allumettes
+                liste_boutons_options[2].texte = cfg.nombre_allumettes
 
                 if nom_bouton == 'Menu':
                     break
