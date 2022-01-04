@@ -136,15 +136,23 @@ def fin(joueur: int):
 
 def jeu(liste_marienbad):
     # coup_possibles = gen_set_coup_possibles(cfg.k)
-    image_allumette = fltk.redimensionner_image('allumette.png', 0.05)
-    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', 0.05)
+    coeff = graphiques.calcul_taille_image(
+        cfg.taille_image,
+        (cfg.largeur_allumette, cfg.hauteur_allumette)
+    )
+    image_allumette = fltk.redimensionner_image('allumette.png', coeff)
+    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', coeff)
 
     bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
+    coups_possibles = cfg.coups_possibles
+    coup = 0
+    if len(liste_marienbad) > 1:
+        coups_possibles = range(1, max(liste_marienbad) + 1)
 
-    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, cfg.coups_possibles)
+    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
 
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
@@ -157,10 +165,6 @@ def jeu(liste_marienbad):
         )
     ] + gameplay.hitbox_marienbad(liste_allumettes)
 
-    coeff = graphiques.calcul_taille_image(
-        cfg.taille_image,
-        (cfg.largeur_allumette, cfg.hauteur_allumette)
-    )
 
     while True:
         try:
@@ -180,14 +184,19 @@ def jeu(liste_marienbad):
                         nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
                     )
                     indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                        indice_coups_possibles, 1, cfg.coups_possibles,
+                        indice_coups_possibles, 1, coups_possibles,
                         liste_allumettes, nom_bouton
                     )
 
                 if nom_bouton == 'Fin de tour' and indice_coups_possibles != -1:
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
-                    joueur = 2 - (joueur - 1)
+                    joueur = 3 - joueur
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
+                    if joueur == 1 and cfg.mode_solo:
+                        if cfg.mode_difficile:
+                            coup = coups_gagnants[len(liste_allumettes[0])]
+                        elif len(liste_allumettes[0]) > 0 or not coup:
+                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[0])) - 1)
                     if joueur == 2 and cfg.mode_solo:
                         liste_boutons_jeu[1].texte = "3X-PL0-X10N"
                     indice_coups_possibles = -1
@@ -197,22 +206,18 @@ def jeu(liste_marienbad):
                     nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
                 )
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                    indice_coups_possibles, -1, cfg.coups_possibles,
+                    indice_coups_possibles, -1, coups_possibles,
                     liste_allumettes, nom_bouton
                 )
 
             if cfg.mode_solo and joueur == 2:
-                if cfg.mode_difficile:
-                    coup = coups_gagnants[len(liste_allumettes[0])]
-                elif len(liste_allumettes[0]) > 0:
-                    coup = random.randint(0, min(len(cfg.coups_possibles), len(liste_allumettes[0])) - 1)
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                    coup, 0, cfg.coups_possibles,
+                    coup, 0, coups_possibles,
                     liste_allumettes, nom_bouton
                 )
 
-            if not gameplay.coup_possible(liste_allumettes, cfg.coups_possibles):
-                joueur = 2 - (joueur - 1)
+            if not gameplay.coup_possible(liste_allumettes, coups_possibles):
+                joueur = 3 - joueur
                 return joueur
 
 
@@ -316,7 +321,6 @@ def options():
                     liste_boutons_options[9].etat = cfg.animation
 
                 cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
-                print(cfg.misere)
 
                 liste_boutons_options[2].texte = cfg.nombre_allumettes
 

@@ -65,6 +65,7 @@ def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificate
     le texte du bouton. Par défaut, ``'Biometric Joe'``
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool invisible: Optionnel, rend le bouton invisible
 
     :return: Objet Bouton factice
     """
@@ -109,7 +110,7 @@ def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float, identifica
 
 def cree_bouton_booleen(
         ax: float, ay: float, bx: float, by: float, identificateur: str, etat: bool,
-        texte_actif: str, texte_desactive: str, **kwargs) -> BoutonBooleen:
+        texte_actif: str, texte_desactive: str, invert_color=False, **kwargs) -> BoutonBooleen:
     """
     Crée un bouton booléen à partir de positions relatives à la fenêtre, et l'initialise
     à la valeur du booléen ``etat``.
@@ -124,11 +125,13 @@ def cree_bouton_booleen(
     :param str identificateur: Nom du bouton
     :param str texte_actif: Libellé du bouton à l'état actif
     :param str texte_desactive: Libellé du bouton à l'état désactivé
+    :param bool invert_color: Inverse la couleur activé/désactivé
 
     :param str police: Optionnel, nom de la typographie à utiliser pour
     le texte du bouton. Par défaut, ``'Biometric Joe'``
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool invisible: Optionnel, rend le bouton invisible
  
     :return BoutonBooleen: Objet bouton booléen
     """
@@ -144,6 +147,10 @@ def cree_bouton_booleen(
                 texte_desactive,
              )
     parse_optionnal_args(kwargs, bouton)
+    if invert_color:
+        bouton.couleur_actif, bouton.couleur_desactive = bouton.couleur_desactive, bouton.couleur_actif
+        bouton.couleur_hovered_actif, bouton.couleur_hovered_desactive = bouton.couleur_hovered_desactive, bouton.couleur_hovered_actif
+    
     bouton.taille_texte = taille_texte_bouton(bouton)
 
     return bouton
@@ -171,6 +178,7 @@ def cree_bouton_simple(
     Par défaut, ``'Biometric Joe'``
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool invisible: Optionnel, rend le bouton invisible
     
     :return Bouton: Objet Bouton
     """
@@ -208,6 +216,8 @@ def parse_optionnal_args(args: dict, bouton):
             break
         elif arg == 'police':
             bouton.police = value
+        elif arg == 'invisible':
+            bouton.invisible = value
 
         else:
             raise KeyError(f"L'argument {arg} n'existe pas, ou le bouton de \
