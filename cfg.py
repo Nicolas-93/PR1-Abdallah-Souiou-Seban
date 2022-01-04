@@ -6,6 +6,8 @@ nombre_allumettes = 10
 misere = True
 coups_possibles = [1,2,4,5]
 liste_marienbad=[1,3,5,7]
+mode_solo = False
+mode_difficile = False
 
 zoom_allumette = 0.5
 taille_image = fltk.taille_image('allumette.png')

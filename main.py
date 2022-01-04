@@ -4,6 +4,8 @@ import gameplay
 import bouton
 import cfg
 import animation
+import solo
+import random
 
 # README
 # Mode joueur solo
@@ -72,7 +74,7 @@ def fin(joueur: int):
     """
     :param int joueur: Numéro du joueur
     """
-    global image_allumette, image_allumette_brulee, liste_chute	
+    global image_allumette, image_allumette_brulee, liste_chute
     liste_boutons_fin = [
         bouton.cree_bouton_simple(
             0.1, 0.6, 0.45, 0.8,
@@ -96,7 +98,7 @@ def fin(joueur: int):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
-            animation.dessiner(liste_chute) 
+            animation.dessiner(liste_chute)
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -131,6 +133,8 @@ def jeu(liste_marienbad):
     joueur = 1
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
 
+    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, cfg.coups_possibles)
+
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -159,28 +163,40 @@ def jeu(liste_marienbad):
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
                 exit()
-
             elif tev == "ClicGauche":
-                indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(
-                    nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
-                )
-                indice_coups_possibles = gameplay.appliquer_selection_allumettes(
-                    indice_coups_possibles, 1, cfg.coups_possibles,
-                    liste_allumettes, nom_bouton
-                )
+                if not cfg.mode_solo or joueur == 1:
+                    indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(
+                        nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
+                    )
+                    indice_coups_possibles = gameplay.appliquer_selection_allumettes(
+                        indice_coups_possibles, 1, cfg.coups_possibles,
+                        liste_allumettes, nom_bouton
+                    )
 
                 if nom_bouton == 'Fin de tour' and indice_coups_possibles != -1:
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 2 - (joueur - 1)
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
+                    if liste_boutons_jeu[1].texte == "Joueur 2" and cfg.mode_solo:
+                        liste_boutons_jeu[1].texte = "3X-PL0-X10N"
                     indice_coups_possibles = -1
 
-            elif tev == "ClicDroit":
+            elif tev == "ClicDroit" and (not cfg.mode_solo or joueur == 1):
                 indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(
                     nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
                 )
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     indice_coups_possibles, -1, cfg.coups_possibles,
+                    liste_allumettes, nom_bouton
+                )
+
+            if cfg.mode_solo and joueur == 2:
+                if cfg.mode_difficile:
+                    coup = coups_gagnants[len(liste_allumettes[0])]
+                else:
+                    coup = random.randint(0, min(len(cfg.coups_possibles), len(liste_allumettes[0])) - 1)
+                indice_coups_possibles = gameplay.appliquer_selection_allumettes(
+                    coup, 0, cfg.coups_possibles,
                     liste_allumettes, nom_bouton
                 )
 
@@ -201,9 +217,15 @@ def options():
     liste_boutons_options = [
         bouton.cree_bouton_booleen(
             0.05, 0.60, 0.95, 0.70,
-            'Mode',
+            'Misere',
             cfg.misere,
             'Mode misère', 'Mode normal'
+        ),
+        bouton.cree_bouton_booleen(
+            0.05, 0.15, 0.95, 0.25,
+            'Solo',
+            cfg.mode_solo,
+            'Mode solo', 'Mode 2 joueurs'
         ),
         bouton.cree_bouton_factice(
             0.4, 0.45, 0.6, 0.55,
@@ -243,12 +265,28 @@ def options():
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
 
+            if len(liste_boutons_options) > 9:
+                liste_boutons_options.pop(-1)
+            if cfg.mode_solo:
+                liste_boutons_options.append(bouton.cree_bouton_booleen(
+                                                0.05, 0.03, 0.95, 0.13,
+                                                'Difficulte',
+                                                not cfg.mode_difficile,
+                                                'Difficulté : facile', 'Difficulté : difficile'
+                                            ))
+
             nom_bouton = bouton.dessiner_boutons(liste_boutons_options)
 
             if tev == 'ClicGauche':
-                if nom_bouton == 'Mode':
+                if nom_bouton == 'Misere':
                     cfg.misere = not cfg.misere
                     liste_boutons_options[0].etat = cfg.misere
+                if nom_bouton == 'Solo':
+                    cfg.mode_solo = not cfg.mode_solo
+                    liste_boutons_options[1].etat = cfg.mode_solo
+                if nom_bouton == 'Difficulte':
+                    cfg.mode_difficile = not cfg.mode_difficile
+                    liste_boutons_options[9].etat = cfg.mode_difficile
 
                 if nom_bouton == '-10':
                     cfg.nombre_allumettes -= 10
