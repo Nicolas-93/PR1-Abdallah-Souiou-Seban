@@ -51,7 +51,7 @@ def menu():
             fltk.efface_tout()
             graphiques.background("#3f3e47")
             if cfg.animation:
-                animation.dessiner(liste_chute) 
+                animation.dessiner(liste_chute)
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -104,9 +104,9 @@ def fin(joueur: int):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
-            
+
             if cfg.animation:
-                animation.dessiner(liste_chute) 
+                animation.dessiner(liste_chute)
 
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
@@ -154,6 +154,9 @@ def jeu(liste_marienbad):
 
     coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
 
+    if coups_gagnants[len(liste_allumettes[0])] != None and cfg.mode_solo and cfg.mode_difficile:
+        joueur = 2
+
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -161,7 +164,7 @@ def jeu(liste_marienbad):
         ),
         bouton.cree_bouton_factice(
             0.3, 0.85, 0.7, 0.95,
-            "Joueur 1"
+            f"Joueur {joueur}"
         )
     ] + gameplay.hitbox_marienbad(liste_allumettes)
 
@@ -174,6 +177,9 @@ def jeu(liste_marienbad):
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
+
+            if cfg.mode_solo and liste_boutons_jeu[1].texte == "Joueur 2":
+                liste_boutons_jeu[1].texte = "3X-PL0-X10N"
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
@@ -192,13 +198,12 @@ def jeu(liste_marienbad):
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 3 - joueur
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
-                    if joueur == 1 and cfg.mode_solo:
-                        if cfg.mode_difficile:
-                            coup = coups_gagnants[len(liste_allumettes[0])]
-                        elif len(liste_allumettes[0]) > 0 or not coup:
-                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[0])) - 1)
                     if joueur == 2 and cfg.mode_solo:
-                        liste_boutons_jeu[1].texte = "3X-PL0-X10N"
+                        if cfg.mode_difficile and coups_gagnants[len(liste_allumettes[0])] != None:
+                            coup = coups_gagnants[len(liste_allumettes[0])]
+                        elif len(liste_allumettes[0]) > 0:
+                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[0])) - 1)
+                        graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
                     indice_coups_possibles = -1
 
             elif tev == "ClicDroit" and (not cfg.mode_solo or joueur == 1):
@@ -213,7 +218,7 @@ def jeu(liste_marienbad):
             if cfg.mode_solo and joueur == 2:
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     coup, 0, coups_possibles,
-                    liste_allumettes, nom_bouton
+                    liste_allumettes, '0'
                 )
 
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
