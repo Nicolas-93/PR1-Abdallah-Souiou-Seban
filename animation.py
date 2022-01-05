@@ -1,5 +1,4 @@
 import fltk
-from tkinter import *
 from dataclasses import dataclass
 from PIL import Image, ImageTk
 import random
@@ -28,7 +27,7 @@ def initialisation(number):
                 ax = random.randint(0, cfg.largeur_fenetre),
                 ay = random.randint(int(-cfg.hauteur_fenetre*cfg.hauteur_allumette), 0),
                 Alu = imagechute,
-                speed = random.randint(2,20),
+                speed = random.randint(2,10),
                 angle = random.randint(0,35),
                 height = imagechute.height
             )

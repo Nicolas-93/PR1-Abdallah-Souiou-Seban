@@ -264,7 +264,7 @@ def jeu(liste_marienbad):
 def options():
     liste_boutons_options = [
         bouton.cree_bouton_booleen(
-            0.05, 0.60, 0.95, 0.70,
+            0.05, 0.45, 0.95, 0.55,
             'Misere',
             cfg.misere,
             'Mode misère', 'Mode normal',
@@ -277,7 +277,7 @@ def options():
             'Mode solo', '2 joueurs'
         ),
         bouton.cree_bouton_factice(
-            0.4, 0.45, 0.6, 0.55,
+            0.55, 0.30, 0.65, 0.40,
             cfg.nombre_allumettes
         ),
         bouton.cree_bouton_simple(
@@ -285,27 +285,27 @@ def options():
             'Menu'
         ),
         bouton.cree_bouton_factice(
-            0.05, 0.30, 0.95, 0.40,
-            "Nombre d'allumettes"
+            0.05, 0.30, 0.20, 0.40,
+            "Nombre", unifier_texte=False
         ),
         bouton.cree_bouton_simple(
-            0.05, 0.45, 0.2, 0.55,
+            0.25, 0.30, 0.35, 0.40,
             '-10', police='Arial'
         ),
         bouton.cree_bouton_simple(
-            0.25, 0.45, 0.35, 0.55,
+            0.40, 0.30, 0.50, 0.40,
             '-1', police='Arial'
         ),
         bouton.cree_bouton_simple(
-            0.65, 0.45, 0.75, 0.55,
+            0.70, 0.30, 0.80, 0.40,
             '+1', police='Arial'
         ),
         bouton.cree_bouton_simple(
-            0.8, 0.45, 0.95, 0.55,
+            0.85, 0.30, 0.95, 0.40,
             '+10', police='Arial'
         ),
         bouton.cree_bouton_booleen(
-            0.05, 0.9, 0.225, 1,
+            0.05, 0.60, 0.20, 0.7,
             'Animation', cfg.animation,
             'Animé', 'Non animé',
             unifier_texte=False
@@ -316,6 +316,11 @@ def options():
             cfg.mode_difficile,
             'difficile', 'facile',
             invert_color=True, invisible=(not cfg.mode_solo)
+        ),
+        bouton.cree_bouton_booleen(
+            0.25, 0.60, 0.35, 0.7,
+            'Son', cfg.son,
+            'Son!', 'Son'
         )
     ]
 
@@ -355,6 +360,10 @@ def options():
                 if nom_bouton == 'Animation':
                     cfg.animation = not cfg.animation
                     liste_boutons_options[9].etat = cfg.animation
+                if nom_bouton == 'Son':
+                    cfg.son = not cfg.son
+                    liste_boutons_options[11].etat = cfg.son
+                    #toggle_sound()
 
                 cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
 

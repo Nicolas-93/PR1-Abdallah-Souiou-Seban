@@ -1,23 +1,25 @@
 import random
+import os
+import cfg
 
 try:
     import pygame
-    pygame.init()
     pygame_available = True
+    pygame.init()
 
 except:
     pygame_available = False
 
 def initialisation():
     global menu_bleep, menu_depart, bye_bye, change
-    menu_bleep = pygame.mixer.Sound('sound\MenuBleep.wav')
-    menu_depart = pygame.mixer.Sound('sound\MenuAccept.wav')
-    change = pygame.mixer.Sound('sound\MenuWoosh.wav')
+    menu_bleep = pygame.mixer.Sound(os.path.join('sound', 'MenuBleep.wav'))
+    menu_depart = pygame.mixer.Sound(os.path.join('sound', 'MenuAccept.wav'))
+    change = pygame.mixer.Sound(os.path.join('sound', 'MenuWoosh.wav'))
 
 def SoundAllu():
     if pygame_available:
         boopie = random.randint(0,5)
-        boop = pygame.mixer.Sound('sound\DNATiny'+ str(boopie)+'.wav')
+        boop = pygame.mixer.Sound(os.path.join('sound', f'DNATiny{boopie}.wav'))
         boop.play()
 
 def BoutonAccept():
@@ -35,8 +37,16 @@ def MenuChange():
     if pygame_available:
         change.play()
 
+"""def toggle_sound():
+    print(cfg.son)
+    if cfg.son:
+        pygame.mixer.pause()
+    else:
+        pygame.mixer.unpause()"""
+    
+
 def song(name):
-    pygame.mixer.music.load('sound/song/' + name + '.mp3')
+    pygame.mixer.music.load(os.path.join('sound', 'song', f'{name}.mp3'))
     pygame.mixer.music.play(-1)
 
 
