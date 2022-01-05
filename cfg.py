@@ -4,7 +4,7 @@ import fltk
 largeur_fenetre, hauteur_fenetre    =       800, 640
 nombre_allumettes                   =       10
 misere                              =       False
-coups_possibles                     =       [1,2,4,5]
+coups_possibles                     =       [1,2]
 liste_marienbad                     =       [1,3,5,7]
 animation                           =       True
 zoom_allumette                      =       0.5
