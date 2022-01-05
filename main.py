@@ -6,6 +6,7 @@ import cfg
 import animation
 import solo
 import random
+import music
 
 # README
 # Mode joueur solo
@@ -29,7 +30,7 @@ def menu():
     image_allumette_brulee = fltk.redimensionner_image(cfg.image_allumette_brulee, coeff)
 
     liste_chute = animation.initialisation(20)
-
+    music.initialisation()
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
             0.2, 0.45, 0.8, 0.55,
@@ -64,10 +65,13 @@ def menu():
 
             elif tev == "ClicGauche":
                 if nom_bouton == 'Jeu normal':
+                    music.GameStart()
                     fin(jeu([cfg.nombre_allumettes]))
                 if nom_bouton == 'Jeu de Marienbad':
+                    music.GameStart()
                     fin(jeu(cfg.liste_marienbad))
                 if nom_bouton == 'Options':
+                    music.MenuChange()
                     options()
 
             fltk.mise_a_jour()
@@ -95,6 +99,10 @@ def fin(joueur: int):
     ]
     bouton.unifier_taille_texte(liste_boutons_fin)
 
+    if cfg.mode_solo and cfg.mode_difficile:
+        music.song('WORST END')
+    else:
+        music.song('Neutral')
     if cfg.misere:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
     else:
@@ -123,6 +131,9 @@ def fin(joueur: int):
 
             elif tev == "ClicGauche":
                 if nom_bouton == 'Menu':
+                    music.BoutonAccept()
+                    if cfg.mode_solo and cfg.mode_difficile:
+                        music.song('Neutral')
                     menu()
                 if nom_bouton == 'Quitter':
                     fltk.ferme_fenetre()
@@ -154,7 +165,11 @@ def jeu(liste_marienbad):
 
     coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
 
-    print(coups_gagnants)
+    if cfg.mode_solo and cfg.mode_difficile:
+        music.song('3X-PL0-X10N')
+    else:
+        music.song('friendly_duel')
+
     if coups_gagnants[len(liste_allumettes[0])] != None and cfg.mode_solo and cfg.mode_difficile:
         joueur = 2
 
@@ -186,6 +201,7 @@ def jeu(liste_marienbad):
                 fltk.ferme_fenetre()
                 exit()
             elif tev == "ClicGauche":
+
                 if not cfg.mode_solo or joueur == 1:
                     indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(
                         nom_bouton, liste_allumettes, indice_coups_possibles, bouton_precedent, tev
@@ -196,6 +212,7 @@ def jeu(liste_marienbad):
                     )
 
                 if nom_bouton == 'Fin de tour' and indice_coups_possibles != -1:
+                    music.BoutonAccept()
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 3 - joueur
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
@@ -308,6 +325,8 @@ def options():
             nom_bouton = bouton.dessiner_boutons(liste_boutons_options)
 
             if tev == 'ClicGauche':
+                if nom_bouton != None and nom_bouton != 'Difficulte' and nom_bouton != "Nombre d'allumettes" and nom_bouton != 10 and nom_bouton != 'Menu':
+                    music.BoutonAccept()
                 if nom_bouton == 'Misere':
                     cfg.misere = not cfg.misere
                     liste_boutons_options[0].etat = cfg.misere
@@ -316,6 +335,8 @@ def options():
                     liste_boutons_options[1].etat = cfg.mode_solo
                     liste_boutons_options[10].invisible = not cfg.mode_solo
                 if nom_bouton == 'Difficulte':
+                    if not liste_boutons_options[10].invisible:
+                        music.BoutonAccept()
                     cfg.mode_difficile = not cfg.mode_difficile
                     liste_boutons_options[10].etat = not liste_boutons_options[10].etat
                 if nom_bouton == '-10':
@@ -335,6 +356,7 @@ def options():
                 liste_boutons_options[2].texte = cfg.nombre_allumettes
 
                 if nom_bouton == 'Menu':
+                    music.MenuChange()
                     break
 
             if tev == 'Quitte' or tev == 'Touche' and fltk.touche(ev) == 'Escape':
@@ -349,5 +371,5 @@ def options():
 if __name__ == "__main__":
 
     fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre)
-
+    music.song('Neutral')
     menu()

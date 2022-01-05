@@ -4,6 +4,7 @@ import bouton
 from bouton import Bouton
 import cfg
 import graphiques
+import music
 
 @dataclass
 class Allumette:
@@ -126,6 +127,7 @@ def check_hitbox(nom_bouton: str, liste_allumettes: List[List[Allumette]],
         retour = -1
 
     if nom_bouton != None and nom_bouton.isnumeric():
+        music.SoundAllu()
         if bouton_precedent != None:
             if bouton_precedent != nom_bouton:
                 reset_selection_rangee(liste_allumettes[int(bouton_precedent)])
