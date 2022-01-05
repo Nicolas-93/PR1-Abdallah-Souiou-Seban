@@ -105,6 +105,8 @@ def fin(joueur: int):
         music.song('Neutral')
     if cfg.misere:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+    elif cfg.mode_solo and cfg.mode_difficile:
+        message = "HAHA MAIS QUEL IDIOT !\nTU AS VRAIMENT CRU\nAVOIR UNE CHANCE\nFACE A 3X-PL0-X10N ?"
     else:
         message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\ndernière allumette !\n:D"
 
@@ -195,7 +197,10 @@ def jeu(liste_marienbad):
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
 
             if cfg.mode_solo and liste_boutons_jeu[1].texte == "Joueur 2":
-                liste_boutons_jeu[1].texte = "3X-PL0-X10N"
+                if cfg.mode_difficile:
+                    liste_boutons_jeu[1].texte = "3X-PL0-X10N"
+                else:
+                    liste_boutons_jeu[1].texte = "T3R3Z1"
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
