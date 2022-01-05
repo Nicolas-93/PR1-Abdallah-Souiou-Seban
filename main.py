@@ -148,7 +148,7 @@ def jeu(liste_marienbad):
     joueur = 1
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     coups_possibles = cfg.coups_possibles
-    coup = 0
+    coup, rangee_coup = 0, 0
     if len(liste_marienbad) > 1:
         coups_possibles = range(1, max(liste_marienbad) + 1)
 
@@ -199,10 +199,12 @@ def jeu(liste_marienbad):
                     joueur = 3 - joueur
                     liste_boutons_jeu[1].texte = f'Joueur {joueur}'
                     if joueur == 2 and cfg.mode_solo:
+                        if cfg.mode_solo and not cfg.mode_difficile:
+                            rangee_coup = random.randint(0, len(liste_allumettes) - 1)
                         if cfg.mode_difficile and coups_gagnants[len(liste_allumettes[0])] != None:
                             coup = coups_gagnants[len(liste_allumettes[0])]
-                        elif len(liste_allumettes[0]) > 0:
-                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[0])) - 1)
+                        elif len(liste_allumettes[rangee_coup]) > 0:
+                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[rangee_coup])) - 1)
                         graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
                     indice_coups_possibles = -1
 
@@ -218,7 +220,7 @@ def jeu(liste_marienbad):
             if cfg.mode_solo and joueur == 2:
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     coup, 0, coups_possibles,
-                    liste_allumettes, '0'
+                    liste_allumettes, str(rangee_coup)
                 )
 
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
