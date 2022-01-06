@@ -197,7 +197,7 @@ def jeu(liste_marienbad):
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
-            
+
             liste_boutons_jeu[1].etat = True if joueur == 1 else False # A optimiser
 
             if tev == 'Quitte':
@@ -219,14 +219,7 @@ def jeu(liste_marienbad):
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 3 - joueur
                     if joueur == 2 and cfg.mode_solo:
-                        if not cfg.mode_difficile:
-                            rangee_coup = random.randint(0, len(liste_allumettes) - 1)
-                            while not liste_allumettes[rangee_coup] and any(liste_allumettes):
-                                rangee_coup = random.randint(0, len(liste_allumettes) - 1)
-                        if cfg.mode_difficile and len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] != None:
-                            coup = coups_gagnants[len(liste_allumettes[0])]
-                        elif len(liste_allumettes[rangee_coup]) > 0:
-                            coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[rangee_coup])) - 1)
+                        rangee_coup, coup = solo.coup_bot(liste_allumettes, coups_gagnants, coups_possibles)
                         graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
                     indice_coups_possibles = -1
 
@@ -251,7 +244,7 @@ def jeu(liste_marienbad):
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 3 - joueur
                 return joueur
-            
+
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
 

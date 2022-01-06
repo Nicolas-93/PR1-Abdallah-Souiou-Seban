@@ -1,12 +1,12 @@
 import random
 import os
 
-try:
-    import pygame
-    pygame_available = True
-
-except:
-    pygame_available = False
+# try:
+#     import pygame
+#     pygame_available = True
+#
+# except:
+pygame_available = False
 
 def initialisation():
     if pygame_available:

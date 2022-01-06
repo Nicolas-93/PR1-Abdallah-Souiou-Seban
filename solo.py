@@ -1,5 +1,6 @@
 import cfg
 import math
+import random
 
 
 def coups_gagnants(nb_allumettes_max, coups_possibles, mode_misere):
@@ -32,3 +33,16 @@ def coups_gagnants_marienbad(liste_allumettes):
             liste_arrivee[rangee] -= coup
             if not int(nimsomme(liste_arrivee)):
                 return rangee, coup - 1
+
+
+def coup_bot(liste_allumettes, coups_gagnants, coups_possibles):
+    rangee_coup, coup = 0, 0
+    if not cfg.mode_difficile:
+        rangee_coup = random.randint(0, len(liste_allumettes) - 1)
+        while not liste_allumettes[rangee_coup] and any(liste_allumettes):
+            rangee_coup = random.randint(0, len(liste_allumettes) - 1)
+    if cfg.mode_difficile and len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] != None:
+        coup = coups_gagnants[len(liste_allumettes[0])]
+    elif len(liste_allumettes[rangee_coup]) > 0:
+        coup = random.randint(0, min(len(coups_possibles), len(liste_allumettes[rangee_coup])) - 1)
+    return rangee_coup, coup
