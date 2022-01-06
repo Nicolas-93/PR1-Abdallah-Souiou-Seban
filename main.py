@@ -174,8 +174,8 @@ def jeu(liste_marienbad):
         music.song('friendly_duel')
 
     if (cfg.mode_difficile and cfg.mode_solo
-        and ((len(liste_allumettes) == 0 and coups_gagnants[len(liste_allumettes[0])] != None)
-        or  (len(liste_allumettes) >= 1 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))]))))):
+        and ((len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] != None)
+        or   (len(liste_allumettes) >= 2 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))]))))):
         joueur = 2
 
     liste_boutons_jeu = [
