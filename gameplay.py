@@ -145,7 +145,7 @@ def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[List
     liste_allumettes = []
     nb_rangees = len(liste_marienbad)
     nombre_allumettes_max = max(liste_marienbad)
-    marge = 40
+    marge = cfg.hauteur_fenetre*0.1
 
     espacement_x = cfg.largeur_fenetre / (nombre_allumettes_max+1)
     x_max = (nombre_allumettes_max-1) * espacement_x + cfg.largeur_allumette

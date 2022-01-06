@@ -71,7 +71,7 @@ class CustomCanvas:
 
     _default_ev = ['ClicGauche', 'ClicDroit', 'Touche']
 
-    def __init__(self, width, height, refresh_rate=100, events=None):
+    def __init__(self, width, height, title, refresh_rate=100, events=None):
         # width and height of the canvas
         self.width = width
         self.height = height
@@ -79,10 +79,12 @@ class CustomCanvas:
 
         # root Tk object
         self.root = tk.Tk()
+        self.root.title(title)
 
         # canvas attached to the root object
         self.canvas = tk.Canvas(self.root, width=width,
                                 height=height, highlightthickness=0)
+        
 
         # adding the canvas to the root window and giving it focus
         self.canvas.pack()
@@ -166,16 +168,17 @@ class FenetreDejaCree(Exception):
 #############################################################################
 
 
-def cree_fenetre(largeur, hauteur, frequence=100):
+def cree_fenetre(largeur, hauteur, titre='tk', frequence=100):
     """
-    Crée une fenêtre de dimensions ``largeur`` x ``hauteur`` pixels.
+    Crée une fenêtre avec un titre, de dimensions ``largeur`` x ``hauteur`` pixels,
+    et avec une frequence de rafraîchissement de 100 images par secondes par défaut
     :rtype:
     """
     global __canevas
     if __canevas is not None:
         raise FenetreDejaCree(
             'La fenêtre a déjà été crée avec la fonction "cree_fenetre".')
-    __canevas = CustomCanvas(largeur, hauteur, frequence)
+    __canevas = CustomCanvas(largeur, hauteur, titre, frequence)
 
 
 def ferme_fenetre():

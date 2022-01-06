@@ -10,8 +10,6 @@ import music
 
 # README
 # Mode joueur solo
-# Agrémenter le menu
-# Changer le mode de selection des allumettes
 # Support des champs de texte
 # Supporter les textes sur plusieurs lignes dans bouton.py
 # Ajuster/Zoomer les allumettes de manière à optimiser l'espace disponible
@@ -29,7 +27,7 @@ def menu():
     image_allumette = fltk.redimensionner_image(cfg.image_allumette, coeff)
     image_allumette_brulee = fltk.redimensionner_image(cfg.image_allumette_brulee, coeff)
 
-    liste_chute = animation.initialisation(20)
+    liste_chute = animation.initialisation(int((30*(cfg.largeur_fenetre*cfg.hauteur_fenetre))/(500**2)))
     music.initialisation()
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
@@ -106,7 +104,7 @@ def fin(joueur: int):
     if cfg.misere:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
     elif cfg.mode_solo and cfg.mode_difficile:
-        message = "HAHA MAIS QUEL IDIOT !\nTU AS VRAIMENT CRU\nAVOIR UNE CHANCE\nFACE A 3X-PL0-X10N ?"
+        message = "Comment pouvez croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
     else:
         message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\ndernière allumette !\n:D"
 
@@ -334,8 +332,8 @@ def options():
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_options)
 
-            if tev == 'ClicGauche':
-                if nom_bouton != None and nom_bouton != 'Difficulte' and nom_bouton != "Nombre d'allumettes" and nom_bouton != 10 and nom_bouton != 'Menu':
+            if tev == 'ClicGauche' and nom_bouton != None:
+                if nom_bouton not in {'Difficulte', 'Nombre', 'Menu'}:
                     music.BoutonAccept()
                 if nom_bouton == 'Misere':
                     cfg.misere = not cfg.misere
@@ -349,6 +347,7 @@ def options():
                         music.BoutonAccept()
                     cfg.mode_difficile = not cfg.mode_difficile
                     liste_boutons_options[10].etat = not liste_boutons_options[10].etat
+
                 if nom_bouton == '-10':
                     cfg.nombre_allumettes -= 10
                 if nom_bouton == '-1':
@@ -357,6 +356,9 @@ def options():
                     cfg.nombre_allumettes += 1
                 if nom_bouton == '+10':
                     cfg.nombre_allumettes += 10
+                cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
+                liste_boutons_options[2].texte = cfg.nombre_allumettes
+
                 if nom_bouton == 'Animation':
                     cfg.animation = not cfg.animation
                     liste_boutons_options[9].etat = cfg.animation
@@ -364,11 +366,6 @@ def options():
                     cfg.son = not cfg.son
                     liste_boutons_options[11].etat = cfg.son
                     #toggle_sound()
-
-                cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
-
-                liste_boutons_options[2].texte = cfg.nombre_allumettes
-
                 if nom_bouton == 'Menu':
                     music.MenuChange()
                     break
@@ -384,6 +381,6 @@ def options():
 
 if __name__ == "__main__":
 
-    fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre)
+    fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre, 'Jeux de Nim')
     music.song('Neutral')
     menu()
