@@ -12,7 +12,7 @@ image_allumette                     =   'allumette.png'
 image_allumette_brulee              =   'allumette-brûée.png'
 mode_solo                           =   False
 mode_difficile                      =   False
-
+son                                 =   True
 
 taille_image                        =   fltk.taille_image(image_allumette)
 largeur_allumette                   =   zoom_allumette*0.00015*largeur_fenetre*taille_image[0]
