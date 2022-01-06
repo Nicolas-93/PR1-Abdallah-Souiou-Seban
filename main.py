@@ -27,7 +27,7 @@ def menu():
     image_allumette = fltk.redimensionner_image(cfg.image_allumette, coeff)
     image_allumette_brulee = fltk.redimensionner_image(cfg.image_allumette_brulee, coeff)
 
-    liste_chute = animation.initialisation(int((30*(cfg.largeur_fenetre*cfg.hauteur_fenetre))/(500**2)))
+    liste_chute = animation.initialisation(cfg.nombre_allumettes_animation)
     music.initialisation()
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
@@ -157,6 +157,7 @@ def jeu(liste_marienbad):
     bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
+    adversaire = ("3X-PL0-X10N" if cfg.mode_difficile else "T3R3Z1") if cfg.mode_solo else "Joueur 2"
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     coups_possibles = cfg.coups_possibles
     coup, rangee_coup = 0, 0
@@ -178,12 +179,11 @@ def jeu(liste_marienbad):
             0.3, 0.05, 0.7, 0.15,
             'Fin de tour'
         ),
-        bouton.cree_bouton_factice(
+        bouton.cree_bouton_booleen(
             0.3, 0.85, 0.7, 0.95,
-            f"Joueur {joueur}"
+            'Joueur', True, 'Joueur 1', adversaire, factice=True
         )
     ] + gameplay.hitbox_marienbad(liste_allumettes)
-
 
     while True:
         try:
@@ -193,12 +193,8 @@ def jeu(liste_marienbad):
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
-
-            if cfg.mode_solo and liste_boutons_jeu[1].texte == "Joueur 2":
-                if cfg.mode_difficile:
-                    liste_boutons_jeu[1].texte = "3X-PL0-X10N"
-                else:
-                    liste_boutons_jeu[1].texte = "T3R3Z1"
+            
+            liste_boutons_jeu[1].etat = True if joueur == 1 else False # A optimiser
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
@@ -218,7 +214,6 @@ def jeu(liste_marienbad):
                     music.BoutonAccept()
                     gameplay.jouer_tour(liste_allumettes, liste_boutons_jeu)
                     joueur = 3 - joueur
-                    liste_boutons_jeu[1].texte = f'Joueur {joueur}'
                     if joueur == 2 and cfg.mode_solo:
                         if cfg.mode_solo and not cfg.mode_difficile:
                             rangee_coup = random.randint(0, len(liste_allumettes) - 1)
@@ -249,7 +244,7 @@ def jeu(liste_marienbad):
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 3 - joueur
                 return joueur
-
+            
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
 
@@ -274,17 +269,17 @@ def options():
             cfg.mode_solo,
             'Mode solo', '2 joueurs'
         ),
-        bouton.cree_bouton_factice(
+        bouton.cree_bouton_texte(
             0.55, 0.30, 0.65, 0.40,
-            cfg.nombre_allumettes
+            cfg.nombre_allumettes, factice=True
         ),
         bouton.cree_bouton_simple(
             0.05, 0.75, 0.95, 0.85,
             'Menu'
         ),
-        bouton.cree_bouton_factice(
+        bouton.cree_bouton_texte(
             0.05, 0.30, 0.20, 0.40,
-            "Nombre", unifier_texte=False
+            "Nombre", unifier_texte=False, factice=True
         ),
         bouton.cree_bouton_simple(
             0.25, 0.30, 0.35, 0.40,

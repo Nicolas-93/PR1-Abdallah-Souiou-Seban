@@ -16,6 +16,7 @@ class Bouton:
     by: float
     identificateur: str
     invisible = False
+    factice = False
 
 @dataclass
 class BoutonTexte(Bouton): # Longue vie aux héritages de dataclasses!!
@@ -43,7 +44,7 @@ class BoutonBooleen(BoutonTexte):
     couleur_hovered_desactive = '#941010'
 
 
-def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificateur: str, **kwargs) -> BoutonTexte:
+def cree_bouton_texte(ax: float, ay: float, bx: float, by: float, identificateur: str, **kwargs) -> BoutonTexte:
     """
     Crée un bouton factice (ne change pas de couleur lors de son survol)
     à partir de positions relatives à la fenêtre, avec comme
@@ -66,6 +67,8 @@ def cree_bouton_factice(ax: float, ay: float, bx: float, by: float, identificate
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
+    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
+    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
 
     :return: Objet Bouton factice
     """
@@ -132,6 +135,8 @@ def cree_bouton_booleen(
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
+    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
+    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
  
     :return BoutonBooleen: Objet bouton booléen
     """
@@ -179,6 +184,8 @@ def cree_bouton_simple(
     :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
     sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
+    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
+    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
     
     :return Bouton: Objet Bouton
     """
@@ -218,6 +225,8 @@ def parse_optionnal_args(args: dict, bouton):
             bouton.police = value
         elif arg == 'invisible':
             bouton.invisible = value
+        elif arg == 'factice':
+            bouton.factice = value
 
         else:
             raise KeyError(f"L'argument {arg} n'existe pas, ou le bouton de \
@@ -254,12 +263,12 @@ def dessiner_bouton(bouton: Bouton) -> bool:
     :return bool: Bouton survolé
     """
 
-    survole = curseur_sur_bouton(bouton) if type(bouton) != BoutonTexte else None
+    survole = curseur_sur_bouton(bouton) if not bouton.factice else False # False
     if not bouton.invisible:
         if type(bouton) == BoutonBooleen:
             if survole:
                 if bouton.etat:
-                        remplissage = bouton.couleur_hovered_actif
+                    remplissage = bouton.couleur_hovered_actif
                 else:
                     remplissage = bouton.couleur_hovered_desactive
             else:

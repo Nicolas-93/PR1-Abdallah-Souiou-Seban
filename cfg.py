@@ -18,3 +18,4 @@ son                                 =   True
 taille_image                        =   fltk.taille_image(image_allumette)
 largeur_allumette                   =   zoom_allumette*0.00015*largeur_fenetre*taille_image[0]
 hauteur_allumette                   =   zoom_allumette*0.00015*hauteur_fenetre*taille_image[1]
+nombre_allumettes_animation         =   int((30*(largeur_fenetre*hauteur_fenetre))/(250000))
