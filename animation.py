@@ -27,7 +27,7 @@ def initialisation(number):
                 ax = random.randint(0, cfg.largeur_fenetre),
                 ay = random.randint(int(-cfg.hauteur_fenetre*2), 0),
                 Alu = imagechute,
-                speed = random.randint(2,3),
+                speed = random.randint(2,7),
                 angle = random.randint(-160,160),
                 height = imagechute.height
             )

@@ -360,7 +360,7 @@ def options():
                 if nom_bouton == 'Son':
                     cfg.son = not cfg.son
                     liste_boutons_options[11].etat = cfg.son
-                    #toggle_sound()
+                    music.toggle_sound()
                 if nom_bouton == 'Menu':
                     music.MenuChange()
                     break
