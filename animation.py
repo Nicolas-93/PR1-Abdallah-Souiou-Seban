@@ -1,5 +1,4 @@
 import fltk
-from tkinter import *
 from dataclasses import dataclass
 from PIL import Image, ImageTk
 import random
@@ -16,38 +15,32 @@ class AluChute:
 
 def initialisation(number):
     liste = []
-    image1 = Image.open('allumette.png')
-    image2 = Image.open('allumette-brûée.png')
+    with Image.open('allumette.png') as img1, Image.open('allumette-brûée.png') as img2:
+        imagechute1 = resize(img1)
+        imagechute2 = resize(img2)
 
     for i in range(number+1):
-        imagechute = image1 if bool(random.getrandbits(1)) else image2
-        imagechute = resize(imagechute)
+        imagechute = imagechute1 if bool(random.getrandbits(1)) else imagechute2
 
         liste.append(
             AluChute(
                 ax = random.randint(0, cfg.largeur_fenetre),
-                ay = random.randint(int(-cfg.hauteur_fenetre*cfg.hauteur_allumette), 0),
+                ay = random.randint(int(-cfg.hauteur_fenetre*2), 0),
                 Alu = imagechute,
-                speed = random.randint(2,20),
-                angle = random.randint(0,35),
+                speed = random.randint(2,3),
+                angle = random.randint(-160,160),
                 height = imagechute.height
             )
         )
-    liste = rotation(liste)
+        imagechute = imagechute.rotate(liste[-1].angle, expand = True, resample=Image.BICUBIC)
+        liste[-1].height = imagechute.height
+        liste[-1].Alu = ImageTk.PhotoImage(imagechute)
+
     return liste
 
 def resize(image):
     (width, height) = (image.width // 10, image.height // 10)
-    return image.resize((width, height))
-    
-def rotation(liste):
-    for elem in liste:
-        img = elem.Alu
-        ang = elem.angle
-        elem.Alu = img.rotate(ang * 10, expand = True)
-        elem.height = img.height
-        elem.Alu = ImageTk.PhotoImage(elem.Alu)
-    return liste
+    return image.resize((width, height), resample=Image.BICUBIC)
 
 def chute(elem):
     elem.ay += elem.speed

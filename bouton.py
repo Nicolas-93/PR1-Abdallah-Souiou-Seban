@@ -254,7 +254,7 @@ def dessiner_bouton(bouton: Bouton) -> bool:
     :return bool: Bouton survolé
     """
 
-    survole = curseur_sur_bouton(bouton)
+    survole = curseur_sur_bouton(bouton) if type(bouton) != BoutonTexte else None
     if not bouton.invisible:
         if type(bouton) == BoutonBooleen:
             if survole:

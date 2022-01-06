@@ -14,11 +14,21 @@ def coups_gagnants(nb_allumettes_max, coups_possibles, mode_misere):
     return liste_coups
 
 
-def strategie_marienbad(liste_allumettes):
-    table_binaire, xor, bilan = [], 0, ''
-    for i, nb_allumettes in enumerate(liste_allumettes):
-        table_binaire.append(format(nb_allumettes, 'b').zfill(int(math.log(max(liste_allumettes), 2)) + 1))
-    for i in range(int(math.log(max(liste_allumettes), 2)) + 1):
-        [xor := xor ^ x for x in [int(row[i]) for row in table_binaire]]
-        bilan += str(xor)
+def nimsomme(liste_allumettes):
+    table_binaire, xor, bilan = [], 0, '0'
+    if max(liste_allumettes):
+        for nb_allumettes in liste_allumettes:
+            table_binaire.append(format(nb_allumettes, 'b').zfill(int(math.log(max(liste_allumettes), 2)) + 1))
+        for i in range(int(math.log(max(liste_allumettes), 2)) + 1):
+            [xor := xor ^ x for x in [int(row[i]) for row in table_binaire]]
+            bilan += str(xor)
     return bilan
+
+
+def coups_gagnants_marienbad(liste_allumettes):
+    for rangee in range(len(liste_allumettes)):
+        for coup in range(liste_allumettes[rangee] + 1):
+            liste_arrivee = liste_allumettes[::]
+            liste_arrivee[rangee] -= coup
+            if not int(nimsomme(liste_arrivee)):
+                return rangee, coup - 1
