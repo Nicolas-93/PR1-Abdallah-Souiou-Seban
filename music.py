@@ -1,8 +1,8 @@
 import random
+import os
 
 try:
     import pygame
-    pygame.init()
     pygame_available = True
 
 except:
@@ -10,14 +10,14 @@ except:
 
 def initialisation():
     global menu_bleep, menu_depart, bye_bye, change
-    menu_bleep = pygame.mixer.Sound('sound\MenuBleep.wav')
-    menu_depart = pygame.mixer.Sound('sound\MenuAccept.wav')
-    change = pygame.mixer.Sound('sound\MenuWoosh.wav')
+    menu_bleep = pygame.mixer.Sound(os.path.join(os.path.curdir, 'sound/MenuBleep.wav'))
+    menu_depart = pygame.mixer.Sound(os.path.join(os.path.curdir, 'sound/MenuAccept.wav'))
+    change = pygame.mixer.Sound(os.path.join(os.path.curdir, 'sound/MenuWoosh.wav'))
 
 def SoundAllu():
     if pygame_available:
         boopie = random.randint(0,5)
-        boop = pygame.mixer.Sound('sound\DNATiny'+ str(boopie)+'.wav')
+        boop = pygame.mixer.Sound(os.path.join(os.path.curdir, 'sound/DNATiny'+ str(boopie)+'.wav'))
         boop.play()
 
 def BoutonAccept():
@@ -36,8 +36,6 @@ def MenuChange():
         change.play()
 
 def song(name):
-    pygame.mixer.music.load('sound/song/' + name + '.mp3')
+    pygame.init()
+    pygame.mixer.music.load(os.path.join(os.path.curdir, 'sound/song/' + name + '.mp3'))
     pygame.mixer.music.play(-1)
-
-
-

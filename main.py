@@ -167,6 +167,8 @@ def jeu(liste_marienbad):
 
     coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
 
+    for coup in coups_gagnants: pass
+
     if cfg.mode_solo and cfg.mode_difficile:
         music.song('3X-PL0-X10N')
     else:
@@ -224,7 +226,7 @@ def jeu(liste_marienbad):
                     if joueur == 2 and cfg.mode_solo:
                         if cfg.mode_solo and not cfg.mode_difficile:
                             rangee_coup = random.randint(0, len(liste_allumettes) - 1)
-                            while not liste_allumettes[rangee_coup]:
+                            while not liste_allumettes[rangee_coup] and any(liste_allumettes):
                                 rangee_coup = random.randint(0, len(liste_allumettes) - 1)
                         if cfg.mode_difficile and coups_gagnants[len(liste_allumettes[0])] != None:
                             coup = coups_gagnants[len(liste_allumettes[0])]
