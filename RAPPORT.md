@@ -34,6 +34,13 @@ Année 2021-2022 - Semestre 1 <br>
 
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # <h1 style="text-align: center;"> <strong> Guide d'installation et d'utilisation du programme </strong> </h1>
 
@@ -51,10 +58,6 @@ L'installation de Pygame, bien qu'optionnel, est recommandée pour pouvoir profi
 - Pour plus d'explications sur comment installer Pygame, rendez-vous: https://www.pygame.org/wiki/GettingStarted
 
 ### Une fois fais, à l'aide du terminal déplacez vous dans le répertoire où vous avez placé le dossier et éxécuter nim.py dans votre terminal !
-
-<br>
-<br>
-
 ## **Règles de jeu :**
 Le jeu de Nim peut se jouer de deux façons:
 - Le jeu classique, où vous n'avez qu'une ligne d'allumettes et une liste de coups possibles prédéfinies.
@@ -63,10 +66,6 @@ Le jeu de Nim peut se jouer de deux façons:
 Chacun de ces jeux peut se jouer avec deux règles (voir Utilisation des menus):
 - Le mode normal, où le gagnant de la partie est celui qui récolte la dernière allumette.
 - Le mode misère, où le perdant de la partie est celui qui prend la dernière allumette.
-
-<br>
-<br>
-
 ## **Comment jouer ?**
 Dans ce programme, tout se fait à la souris. Que c esoit la naviguation à travers les menus, que la sélection d'allumettes.
 
@@ -146,6 +145,13 @@ Nous avons eu surtout deux grandes difficultés pendant ce projet:
     - Problème qui a été réglé par une légère modifier de la librairie
 - De nombreux bugs autours des ordinateurs.
     - Étant de la programmation assez complexe, il nous a fallut beaucoup de détermination et de persévérance pour aboutir à un résultat satisfaisant.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # <h1 style="text-align: center;"> <strong> Avancement du projet </strong> </h1>
 
