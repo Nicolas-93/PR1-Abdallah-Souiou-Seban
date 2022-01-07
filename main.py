@@ -5,7 +5,6 @@ import bouton
 import cfg
 import animation
 import solo
-import random
 import music
 
 # README
@@ -161,23 +160,6 @@ def jeu(liste_marienbad):
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     coups_possibles = cfg.coups_possibles
     coup, rangee_coup = 0, 0
-    if len(liste_marienbad) > 1:
-        coups_possibles = range(1, max(liste_marienbad) + 1)
-
-    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
-
-    for coup in coups_gagnants: pass
-
-    if cfg.mode_solo and cfg.mode_difficile:
-        music.song('3X-PL0-X10N')
-    else:
-        music.song('friendly_duel')
-
-    if (cfg.mode_difficile and cfg.mode_solo
-        and ((len(liste_allumettes) == 0 and coups_gagnants[len(liste_allumettes[0])] != None)
-        or  (len(liste_allumettes) >= 1 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))]))))):
-        joueur = 2
-
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -189,6 +171,22 @@ def jeu(liste_marienbad):
         )
     ] + gameplay.hitbox_marienbad(liste_allumettes)
 
+    if len(liste_marienbad) > 1:
+        coups_possibles = range(1, max(liste_marienbad) + 1)
+    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
+
+    for coup in coups_gagnants: pass
+
+    if adversaire == "3X-PL0-X10N":
+        music.song('3X-PL0-X10N')
+        if ((len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] != None)
+            or  (len(liste_allumettes) >= 2 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))])))):
+            joueur = 2
+            liste_boutons_jeu[1].etat = False
+    else:
+        music.song('friendly_duel')
+        liste_boutons_jeu[1].etat = True
+
     while True:
         try:
             fltk.efface_tout()
@@ -197,8 +195,6 @@ def jeu(liste_marienbad):
             tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
-
-            liste_boutons_jeu[1].etat = True if joueur == 1 else False # A optimiser
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
@@ -222,6 +218,7 @@ def jeu(liste_marienbad):
                         rangee_coup, coup = solo.coup_bot(liste_allumettes, coups_gagnants, coups_possibles)
                         graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
                     indice_coups_possibles = -1
+                    liste_boutons_jeu[1].etat = not liste_boutons_jeu[1].etat
 
             elif tev == "ClicDroit" and (not cfg.mode_solo or joueur == 1):
                 indice_coups_possibles, bouton_precedent = gameplay.check_hitbox(
@@ -283,19 +280,19 @@ def options():
         ),
         bouton.cree_bouton_simple(
             0.25, 0.30, 0.35, 0.40,
-            '-10', police='Arial'
+            '-10'
         ),
         bouton.cree_bouton_simple(
             0.40, 0.30, 0.50, 0.40,
-            '-1', police='Arial'
+            '-1'
         ),
         bouton.cree_bouton_simple(
             0.70, 0.30, 0.80, 0.40,
-            '+1', police='Arial'
+            '+1'
         ),
         bouton.cree_bouton_simple(
             0.85, 0.30, 0.95, 0.40,
-            '+10', police='Arial'
+            '+10'
         ),
         bouton.cree_bouton_booleen(
             0.05, 0.60, 0.20, 0.7,
