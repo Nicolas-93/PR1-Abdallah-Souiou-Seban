@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from PIL import Image, ImageTk
 import random
 import cfg
+from typing import List
 
 
 @dataclass
@@ -15,7 +16,7 @@ class AluChute:
     height: float
 
 
-def initialisation(number):
+def initialisation(number: float) -> list:
     """
     Prends en entrée un nombre et renvoie une liste contenant des allumettes avec leur image, leur position,
     l'angle, et la vitesse de chute générée aléatoirement.
@@ -56,7 +57,7 @@ def initialisation(number):
     return liste
 
 
-def resize(image):
+def resize(image: object) -> object:
     """
     Prends en entrée une image PIL qu'elle redimenssionne.
 
@@ -66,7 +67,7 @@ def resize(image):
     return image.resize((width, height), resample=Image.BICUBIC)
 
 
-def chute(elem):
+def chute(elem: AluChute) -> None:
     """
     Prends un élément et modifie sa valeur de position verticale selon 
     sa vitesse
@@ -75,7 +76,7 @@ def chute(elem):
     elem.ay = elem.ay % (cfg.hauteur_fenetre + elem.height)
 
 
-def dessiner(liste):
+def dessiner(liste: List[AluChute]) -> None:
     """
     Prends en paramètre une liste, et affiche chaque élément de la liste
     selon leurs valeurs de position et selon leur image
