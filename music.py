@@ -4,8 +4,8 @@ import cfg
 
 try:
     import pygame
-    pygame_available = True
-    sound = True
+    pygame_available = False
+    sound = False
 
 except:
     pygame_available = False
@@ -61,7 +61,7 @@ def MenuChange() -> None:
         change.play()
 
 def toggle_sound() -> None:
-    """ 
+    """
     Désactive la musique et les sons ou les réactive en changeant l'état de "sound"
     """
     global sound

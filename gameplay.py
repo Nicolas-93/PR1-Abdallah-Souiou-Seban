@@ -5,6 +5,7 @@ from bouton import Bouton
 import cfg
 import graphiques
 import music
+import solo
 
 @dataclass
 class Allumette:
@@ -38,22 +39,22 @@ def appliquer_selection_allumettes(
         rangee = int(rangee)
 
         # Déterminer si l'indice de la selection demandé peut devenir valable avec l'increment du clic (+-1)
-        if ((0 <= indice_coups_possibles + increment_clic <= len(coups_possibles)-1) 
+        if ((0 <= indice_coups_possibles + increment_clic <= len(coups_possibles)-1)
         and coups_possibles[indice_coups_possibles + increment_clic] <= len(liste_allumettes[rangee])):
-            
+
             indice_coups_possibles += increment_clic
             nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
 
         elif increment_clic == -1 and indice_coups_possibles == -1:
             nombre_allumettes_a_selectionner = 0
-        
+
         else:
             nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
-        
+
         graphiques.afficher_selection_allumettes(nombre_allumettes_a_selectionner, liste_allumettes, rangee)
 
     return indice_coups_possibles
-    
+
 
 def reset_selection_rangee(liste_rangee: list) -> None:
     """
@@ -113,7 +114,7 @@ def hitbox_marienbad(liste_allumettes: List[List[Allumette]]) -> List[Bouton]:
                 identificateur = str(i),
                 )
         )
-    
+
     return hitbox_allumettes
 
 def check_hitbox(liste_allumettes: List[List[Allumette]], indice_coups_possibles: int,
@@ -133,8 +134,8 @@ def check_hitbox(liste_allumettes: List[List[Allumette]], indice_coups_possibles
                 reset_selection_rangee(liste_allumettes[int(bouton_precedent)])
                 return retour, nom_bouton
         return indice_coups_possibles, nom_bouton
-    return indice_coups_possibles, bouton_precedent        
-        
+    return indice_coups_possibles, bouton_precedent
+
 
 def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[List[Allumette]]:
     """
@@ -209,6 +210,45 @@ def coup_possible(liste_allumettes: List[Allumette], coups_possibles: list) -> b
             if coup <= len(rangee):
                 return True
     return False
+
+
+def message_de_fin(joueur: int) -> str:
+    """
+    Retourne le message de fin de partie en fonction de la situation
+
+    :param int joueur: le joueur qui a pris la dernière allumette
+    :return str: message qui s'affiche à l'écran de fin
+    """
+    if cfg.mode_solo and cfg.mode_difficile:
+        message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
+        music.song('WORST END')
+
+    elif cfg.misere:
+        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+
+    else:
+        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\
+        \ndernière allumette !"
+    return message
+
+
+def premier_tour(liste_allumettes: list, coups_gagnants: list) -> int:
+    """
+    Retourne le joueur qui commence en fonction de la position
+    gagnante ou perdante en mode solo et difficulté difficile.
+
+    :param list liste_allumettes: la liste des allumettes en Marienbad
+    :param list coups_gagnants: la liste des coups gagnants en jeu classique
+    :return int: le joueur qui commence en position gagnante
+    """
+    joueur = 1
+    if len(liste_allumettes) == 1:
+        if coups_gagnants[len(liste_allumettes[0])] is not None:
+            joueur = 2
+    elif int(solo.nimsomme([len(liste_allumettes[x])
+             for x in range(len(liste_allumettes))])):
+        joueur = 2
+    return joueur
 
 
 def message_interruption():
