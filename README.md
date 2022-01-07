@@ -5,7 +5,7 @@
 Exécuter directement main.py (nom à changer) dans le terminal.
 
 ## Pour une utilisation optimale : Installer PIL et Pygame
-(pip install pygame / pip install PIL)
+(pip install pygame pillow)
 
 Installer la police BIOMETRIC JOE 
 
