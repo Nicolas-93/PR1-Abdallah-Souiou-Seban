@@ -45,6 +45,10 @@ def nimsomme(liste_allumettes: List[int]) -> str:
             for x in [int(row[i]) for row in table_binaire]:
                 xor = xor ^ x
             nimsomme += str(xor)
+    if len(nimsomme) == nimsomme.count('0'):
+        return 0
+    if len(nimsomme) == nimsomme.count('1'):
+        return 1
     return nimsomme
 
 
@@ -59,12 +63,14 @@ def coups_gagnants_marienbad(liste_allumettes: List[int]) -> Tuple[int, int]:
     """
 
     new_allumettes = [len(liste_allumettes[x]) for x in range(len(liste_allumettes))]
-    
+
     for rangee in range(len(new_allumettes)):
-        for coup in range(new_allumettes[rangee] + 1):
+        for coup in range(1, new_allumettes[rangee] + 1):
             liste_arrivee = new_allumettes[::]
             liste_arrivee[rangee] -= coup
-            if not (cfg.misere ^ int(nimsomme(liste_arrivee))):
+            if not cfg.misere and nimsomme(liste_arrivee) == 0:
+                return rangee, coup - 1
+            if cfg.misere and int(nimsomme(liste_arrivee)) == 1:
                 return rangee, coup - 1
     return None, None
 

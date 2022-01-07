@@ -5,8 +5,8 @@ import cfg
 
 try:
     import pygame
-    pygame_available = False
-    sound = False
+    pygame_available = True
+    sound = True
 
 except:
     pygame_available = False
