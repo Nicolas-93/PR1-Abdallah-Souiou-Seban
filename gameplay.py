@@ -116,8 +116,8 @@ def hitbox_marienbad(liste_allumettes: List[List[Allumette]]) -> List[Bouton]:
     
     return hitbox_allumettes
 
-def check_hitbox(nom_bouton: str, liste_allumettes: List[List[Allumette]],
-                 indice_coups_possibles: int, bouton_precedent: str, tev: str) -> Tuple[int, str]:
+def check_hitbox(liste_allumettes: List[List[Allumette]], indice_coups_possibles: int,
+                 nom_bouton: str, bouton_precedent: str, tev: str) -> Tuple[int, str]:
     """
     Gère la logique liée à la selection et les appuis sur les boutons correspondants
     """

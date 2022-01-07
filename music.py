@@ -60,4 +60,4 @@ def song(name):
         pygame.init()
         pygame.mixer.music.load(os.path.join('sound', 'song', f'{name}.mp3'))
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.6)
+        pygame.mixer.music.set_volume(0.5)
