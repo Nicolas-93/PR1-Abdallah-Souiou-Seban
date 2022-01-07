@@ -87,14 +87,15 @@ def fin(joueur: int):
     ]
     bouton.unifier_taille_texte(liste_boutons_fin)
 
+    music.song('Neutral')
+    
     if cfg.mode_solo and cfg.mode_difficile:
+        message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
         music.song('WORST END')
-    else:
-        music.song('Neutral')
-    if cfg.misere:
+
+    elif cfg.misere:
         message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
-    elif cfg.mode_solo and cfg.mode_difficile:
-        message = "Comment pouvez croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
+
     else:
         message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\ndernière allumette !\n:D"
 
