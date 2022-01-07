@@ -87,28 +87,18 @@ def fin(joueur: int):
     bouton.unifier_taille_texte(liste_boutons_fin)
 
     music.song('Neutral')
-
-    if cfg.mode_solo and cfg.mode_difficile:
-        message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
-        music.song('WORST END')
-
-    elif cfg.misere:
-        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
-
-    else:
-        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\
-        \ndernière allumette !"
+    message = gameplay.message_de_fin(joueur)
 
     while True:
         try:
             fltk.efface_tout()
+            ev = fltk.donne_ev()
+            tev = fltk.type_ev(ev)
+
             graphiques.background("#3f3e47")
 
             if cfg.animation:
                 animation.dessiner(liste_chute)
-
-            ev = fltk.donne_ev()
-            tev = fltk.type_ev(ev)
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_fin)
             fltk.texte(
@@ -120,7 +110,6 @@ def fin(joueur: int):
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
-                exit()
 
             elif tev == "ClicGauche":
                 if nom_bouton == 'Menu':
@@ -130,7 +119,6 @@ def fin(joueur: int):
                     menu()
                 if nom_bouton == 'Quitter':
                     fltk.ferme_fenetre()
-                    exit()
 
             fltk.mise_a_jour()
 
@@ -140,31 +128,21 @@ def fin(joueur: int):
 
 def jeu(liste_marienbad):
 
-    coeff = graphiques.calcul_taille_image(
-        cfg.taille_image,
-        (cfg.largeur_allumette, cfg.hauteur_allumette)
-    )
-    image_allumette = fltk.redimensionner_image('allumette.png', coeff)
-    image_allumette_brulee = fltk.redimensionner_image(
-        'allumette-brulee.png', coeff
-    )
-    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     adversaire = (('3X-PL0-X10N' if cfg.mode_difficile else 'T3R3Z1')
                   if cfg.mode_solo else
                   'Joueur 2')
-
-    bouton_precedent = None
-    indice_coups_possibles = -1
-    joueur = 1
     coups_possibles = (range(1, max(liste_marienbad) + 1)
                        if len(liste_marienbad) > 1 else
                        cfg.coups_possibles)
 
     coups_gagnants = solo.coups_gagnants(
-        cfg.nombre_allumettes, coups_possibles, cfg.misere
+        cfg.nombre_allumettes, coups_possibles
     )
+    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     coup, rangee_coup = coups_gagnants[len(liste_allumettes[0])], 0
-
+    bouton_precedent = None
+    indice_coups_possibles = -1
+    joueur = 1
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -178,9 +156,8 @@ def jeu(liste_marienbad):
 
     if adversaire == "3X-PL0-X10N":
         music.song('3X-PL0-X10N')
-        if ((len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] is not None)
-        or (len(liste_allumettes) >= 2 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))])))):
-            joueur = 2
+        joueur = gameplay.premier_tour(liste_allumettes, coups_gagnants)
+        if joueur == 2:
             liste_boutons_jeu[1].etat = False
     else:
         music.song('friendly_duel')
@@ -242,7 +219,7 @@ def jeu(liste_marienbad):
             if cfg.mode_solo and joueur == 2:
                 if cfg.mode_difficile and len(liste_allumettes) > 1:
                     rangee_coup, coup = solo.coups_gagnants_marienbad(
-                        [len(liste_allumettes[x]) for x in range(len(liste_allumettes))]
+                        liste_allumettes
                     )
 
                 indice_coups_possibles =\
@@ -266,6 +243,7 @@ def jeu(liste_marienbad):
 
 
 def options():
+
     liste_boutons_options = [
         bouton.cree_bouton_booleen(
             0.05, 0.45, 0.95, 0.55,
@@ -329,6 +307,7 @@ def options():
     ]
 
     bouton.unifier_taille_texte(liste_boutons_options)
+
     while True:
         try:
             fltk.efface_tout()
@@ -388,12 +367,21 @@ def options():
 
 
 if __name__ == "__main__":
+
     if fltk.PIL_AVAILABLE:
         fltk.cree_fenetre(
             cfg.largeur_fenetre, cfg.hauteur_fenetre,
             'Jeux de Nim'
         )
         liste_chute = animation.initialisation(cfg.nombre_allumettes_animation)
+        coeff = graphiques.calcul_taille_image(
+            cfg.taille_image,
+            (cfg.largeur_allumette, cfg.hauteur_allumette)
+        )
+        image_allumette = fltk.redimensionner_image('allumette.png', coeff)
+        image_allumette_brulee = fltk.redimensionner_image(
+            'allumette-brulee.png', coeff
+        )
         music.song('Neutral')
         menu()
     else:

@@ -5,6 +5,7 @@ from bouton import Bouton
 import cfg
 import graphiques
 import music
+import solo
 
 
 @dataclass
@@ -223,6 +224,45 @@ def coup_possible(liste_allumettes: List[Allumette],
             if coup <= len(rangee):
                 return True
     return False
+
+
+def message_de_fin(joueur: int) -> str:
+    """
+    Retourne le message de fin de partie en fonction de la situation
+
+    :param int joueur: le joueur qui a pris la dernière allumette
+    :return str: message qui s'affiche à l'écran de fin
+    """
+    if cfg.mode_solo and cfg.mode_difficile:
+        message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
+        music.song('WORST END')
+
+    elif cfg.misere:
+        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+
+    else:
+        message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\
+        \ndernière allumette !"
+    return message
+
+
+def premier_tour(liste_allumettes: list, coups_gagnants: list) -> int:
+    """
+    Retourne le joueur qui commence en fonction de la position
+    gagnante ou perdante en mode solo et difficulté difficile.
+
+    :param list liste_allumettes: la liste des allumettes en Marienbad
+    :param list coups_gagnants: la liste des coups gagnants en jeu classique
+    :return int: le joueur qui commence en position gagnante
+    """
+    joueur = 1
+    if len(liste_allumettes) == 1:
+        if coups_gagnants[len(liste_allumettes[0])] is not None:
+            joueur = 2
+    elif int(solo.nimsomme([len(liste_allumettes[x])
+             for x in range(len(liste_allumettes))])):
+        joueur = 2
+    return joueur
 
 
 def message_interruption():
