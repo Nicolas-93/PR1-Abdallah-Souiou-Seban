@@ -145,21 +145,25 @@ def fin(joueur: int):
 
 
 def jeu(liste_marienbad):
-    # coup_possibles = gen_set_coup_possibles(cfg.k)
+    
     coeff = graphiques.calcul_taille_image(
         cfg.taille_image,
         (cfg.largeur_allumette, cfg.hauteur_allumette)
     )
     image_allumette = fltk.redimensionner_image('allumette.png', coeff)
     image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', coeff)
+    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
 
+
+    adversaire = ("3X-PL0-X10N" if cfg.mode_difficile else "T3R3Z1") if cfg.mode_solo else "Joueur 2"    
     bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
-    adversaire = ("3X-PL0-X10N" if cfg.mode_difficile else "T3R3Z1") if cfg.mode_solo else "Joueur 2"
-    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
-    coups_possibles = cfg.coups_possibles
-    coup, rangee_coup = 0, 0
+   
+    coups_possibles = range(1, max(liste_marienbad) + 1) if len(liste_marienbad) > 1 else cfg.coups_possibles
+    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
+    coup, rangee_coup = coups_gagnants[len(liste_allumettes[0])], 0
+    
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -170,12 +174,6 @@ def jeu(liste_marienbad):
             'Joueur', True, 'Joueur 1', adversaire, factice=True
         )
     ] + gameplay.hitbox_marienbad(liste_allumettes)
-
-    if len(liste_marienbad) > 1:
-        coups_possibles = range(1, max(liste_marienbad) + 1)
-    coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
-
-    for coup in coups_gagnants: pass
 
     if adversaire == "3X-PL0-X10N":
         music.song('3X-PL0-X10N')
@@ -191,14 +189,15 @@ def jeu(liste_marienbad):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
+
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
-
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
                 exit()
+
             elif tev == "ClicGauche":
 
                 if not cfg.mode_solo or joueur == 1:
@@ -216,7 +215,7 @@ def jeu(liste_marienbad):
                     joueur = 3 - joueur
                     if joueur == 2 and cfg.mode_solo:
                         rangee_coup, coup = solo.coup_bot(liste_allumettes, coups_gagnants, coups_possibles)
-                        graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
+
                     indice_coups_possibles = -1
                     liste_boutons_jeu[1].etat = not liste_boutons_jeu[1].etat
 
@@ -231,7 +230,9 @@ def jeu(liste_marienbad):
 
             if cfg.mode_solo and joueur == 2:
                 if cfg.mode_difficile and len(liste_allumettes) > 1:
-                    rangee_coup, coup = solo.coups_gagnants_marienbad([len(liste_allumettes[x]) for x in range(len(liste_allumettes))])
+                    rangee_coup, coup = solo.coups_gagnants_marienbad(
+                        [len(liste_allumettes[x]) for x in range(len(liste_allumettes))]
+                    )
 
                 indice_coups_possibles = gameplay.appliquer_selection_allumettes(
                     coup, 0, coups_possibles,
@@ -241,7 +242,6 @@ def jeu(liste_marienbad):
             if not gameplay.coup_possible(liste_allumettes, coups_possibles):
                 joueur = 3 - joueur
                 return joueur
-
 
             graphiques.dessiner_allumettes(liste_allumettes, image_allumette, image_allumette_brulee)
 
@@ -304,7 +304,7 @@ def options():
             0.5, 0.15, 0.95, 0.25,
             'Difficulte',
             cfg.mode_difficile,
-            'difficile', 'facile',
+            'hardcore', 'facile',
             invert_color=True, invisible=(not cfg.mode_solo)
         ),
         bouton.cree_bouton_booleen(
@@ -330,38 +330,38 @@ def options():
                 if nom_bouton == 'Misere':
                     cfg.misere = not cfg.misere
                     liste_boutons_options[0].etat = cfg.misere
-                if nom_bouton == 'Solo':
+                elif nom_bouton == 'Solo':
                     cfg.mode_solo = not cfg.mode_solo
                     liste_boutons_options[1].etat = cfg.mode_solo
                     liste_boutons_options[10].invisible = not cfg.mode_solo
-                if nom_bouton == 'Difficulte':
+                elif nom_bouton == 'Difficulte':
                     if not liste_boutons_options[10].invisible:
                         music.BoutonAccept()
                     cfg.mode_difficile = not cfg.mode_difficile
                     liste_boutons_options[10].etat = not liste_boutons_options[10].etat
 
-                if nom_bouton == '-10':
+                elif nom_bouton == '-10':
                     cfg.nombre_allumettes -= 10
-                if nom_bouton == '-1':
+                elif nom_bouton == '-1':
                     cfg.nombre_allumettes -= 1
-                if nom_bouton == '+1':
+                elif nom_bouton == '+1':
                     cfg.nombre_allumettes += 1
-                if nom_bouton == '+10':
+                elif nom_bouton == '+10':
                     cfg.nombre_allumettes += 10
-                cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
-                liste_boutons_options[2].texte = cfg.nombre_allumettes
 
-                if nom_bouton == 'Animation':
+                elif nom_bouton == 'Animation':
                     cfg.animation = not cfg.animation
                     liste_boutons_options[9].etat = cfg.animation
-                if nom_bouton == 'Son':
+                elif nom_bouton == 'Son' and music.pygame_available:
                     cfg.son = not cfg.son
                     liste_boutons_options[11].etat = cfg.son
                     music.toggle_sound()
-                if nom_bouton == 'Menu':
+                elif nom_bouton == 'Menu':
                     music.MenuChange()
                     break
 
+                cfg.nombre_allumettes = 1 if cfg.nombre_allumettes <= 0 else cfg.nombre_allumettes
+                liste_boutons_options[2].texte = cfg.nombre_allumettes
             if tev == 'Quitte' or tev == 'Touche' and fltk.touche(ev) == 'Escape':
                 exit()
 
@@ -372,7 +372,9 @@ def options():
 
 
 if __name__ == "__main__":
-
-    fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre, 'Jeux de Nim')
-    music.song('Neutral')
-    menu()
+    if fltk.PIL_AVAILABLE:
+        fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre, 'Jeux de Nim')
+        music.song('Neutral')
+        menu()
+    else:
+        print("Veuillez installer PIL pour le bon fonctionnement du projet.")

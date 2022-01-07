@@ -1,5 +1,6 @@
 import random
 import os
+import cfg
 
 try:
     import pygame
@@ -9,6 +10,8 @@ try:
 except:
     pygame_available = False
     sound = False
+    cfg.son = False
+    print("Téléchargez pygame pour une meilleure expérience.")
 
 def initialisation():
     if pygame_available:
@@ -40,11 +43,12 @@ def MenuChange():
 
 def toggle_sound():
     global sound
-    pygame.mixer.music.stop()
-    sound = not sound
-    if sound:
-        pygame.mixer.music.load(os.path.join('sound', 'song', 'Neutral.mp3'))
-        pygame.mixer.music.play(-1)
+    if pygame_available:
+        pygame.mixer.music.stop()
+        sound = not sound
+        if sound:
+            pygame.mixer.music.load(os.path.join('sound', 'song', 'Neutral.mp3'))
+            pygame.mixer.music.play(-1)
 
 
 def song(name):

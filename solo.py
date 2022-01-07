@@ -21,7 +21,7 @@ def nimsomme(liste_allumettes):
         for nb_allumettes in liste_allumettes:
             table_binaire.append(format(nb_allumettes, 'b').zfill(int(math.log(max(liste_allumettes), 2)) + 1))
         for i in range(int(math.log(max(liste_allumettes), 2)) + 1):
-            [xor := xor ^ x for x in [int(row[i]) for row in table_binaire]]
+            for x in [int(row[i]) for row in table_binaire]: xor = xor ^ x
             bilan += str(xor)
     return bilan
 
@@ -31,8 +31,9 @@ def coups_gagnants_marienbad(liste_allumettes):
         for coup in range(liste_allumettes[rangee] + 1):
             liste_arrivee = liste_allumettes[::]
             liste_arrivee[rangee] -= coup
-            if not int(nimsomme(liste_arrivee)):
+            if not (cfg.misere ^ int(nimsomme(liste_arrivee))):
                 return rangee, coup - 1
+    return None, None
 
 
 def coup_bot(liste_allumettes, coups_gagnants, coups_possibles):

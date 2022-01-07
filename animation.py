@@ -50,5 +50,3 @@ def dessiner(liste):
     for elem in liste:
         fltk.afficher_image(elem.ax, elem.ay, elem.Alu, ancrage='s')
         chute(elem)
-
-
