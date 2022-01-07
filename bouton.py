@@ -8,6 +8,7 @@ from typing import List, Union
 import fltk
 import cfg
 
+
 @dataclass
 class Bouton:
     ax: float
@@ -18,20 +19,23 @@ class Bouton:
     invisible = False
     factice = False
 
+
 @dataclass
-class BoutonTexte(Bouton): # Longue vie aux héritages de dataclasses!!
+class BoutonTexte(Bouton):
     texte: str
     taille_texte = None
     unifier_texte = True
-    marge_texte = 0.9 # Proportion du texte par rapport au cadre
+    marge_texte = 0.8
     police = 'Biometric Joe'
     couleur_texte = 'black'
     couleur_fond = 'white'
+
 
 @dataclass
 class BoutonSimple(BoutonTexte):
     enable_hovered = True
     couleur_hovered = '#848484'
+
 
 @dataclass
 class BoutonBooleen(BoutonTexte):
@@ -44,7 +48,8 @@ class BoutonBooleen(BoutonTexte):
     couleur_hovered_desactive = '#941010'
 
 
-def cree_bouton_texte(ax: float, ay: float, bx: float, by: float, identificateur: str, **kwargs) -> BoutonTexte:
+def cree_bouton_texte(ax: float, ay: float, bx: float, by: float,
+                      identificateur: str, **kwargs) -> BoutonTexte:
     """
     Crée un bouton factice (ne change pas de couleur lors de son survol)
     à partir de positions relatives à la fenêtre, avec comme
@@ -58,17 +63,19 @@ def cree_bouton_texte(ax: float, ay: float, bx: float, by: float, identificateur
     :param float by: Ordonnée de b relative, entre 0 et 1 inclus
     :param str identificateur: Nom du bouton
 
-    :param bool hovered: Optionnel, détermine si le bouton change de couleur lors
-    de son survol. Par défaut: ``True``
+    :param bool hovered: Optionnel, détermine si le bouton change de couleur
+    lors  de son survol. Par défaut: ``True``
     :param str couleur_hovered: Optionnel, couleur du fond du bouton
     lors de son survol par la souris. Par défaut: ``'#848484'``
     :param str police: Optionnel, nom de la typographie à utiliser pour
     le texte du bouton. Par défaut, ``'Biometric Joe'``
-    :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
-    sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool unifier_texte: Optionnel, spécifie si la taille de texte
+    de ce bouton sera pris en compte lors de l'utilisation de
+    la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
-    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
-    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
+    :param bool factice: Optionnel, si à ``True`` le bouton ne
+    changera pas de couleur à son survol, et l'appel à dessiner_boutons()
+    ne le mentionnera pas
 
     :return: Objet Bouton factice
     """
@@ -86,7 +93,8 @@ def cree_bouton_texte(ax: float, ay: float, bx: float, by: float, identificateur
     return bouton
 
 
-def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float, identificateur: str) -> Bouton:
+def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float,
+                          identificateur: str) -> Bouton:
     """
     Crée un bouton invisible à partir de positions relatives à la fenêtre,
     avec comme identificateur : ``identificateur``
@@ -106,20 +114,25 @@ def cree_bouton_invisible(ax: float, ay: float, bx: float, by: float, identifica
                 by*cfg.hauteur_fenetre,
                 identificateur,
              )
-    bouton.invisible=True
+    bouton.invisible = True
 
     return bouton
 
 
 def cree_bouton_booleen(
-        ax: float, ay: float, bx: float, by: float, identificateur: str, etat: bool,
-        texte_actif: str, texte_desactive: str, invert_color=False, **kwargs) -> BoutonBooleen:
+        ax: float, ay: float, bx: float, by: float,
+        identificateur: str,
+        etat: bool,
+        texte_actif: str, texte_desactive: str,
+        invert_color=False, **kwargs) -> BoutonBooleen:
     """
-    Crée un bouton booléen à partir de positions relatives à la fenêtre, et l'initialise
-    à la valeur du booléen ``etat``.
-    Le libellé du bouton sera ``texte_actif`` lorsque l'attribut ``etat`` du bouton vaut ``True``,
-    sinon le libellé ``texte_desactive``.
-    Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
+    Crée un bouton booléen à partir de positions relatives
+    à la fenêtre, et l'initialise à la valeur du booléen ``etat``.
+    Le libellé du bouton sera ``texte_actif`` lorsque
+    l'attribut ``etat`` du bouton vaut ``True``, sinon
+    le libellé ``texte_desactive``.
+    Utilise les variables globales ``cfg.largeur_fenetre``
+    et ``cfg.hauteur_fenetre``
 
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
     :param float ay: Ordonnée de a relative, entre 0 et 1 inclus
@@ -132,12 +145,14 @@ def cree_bouton_booleen(
 
     :param str police: Optionnel, nom de la typographie à utiliser pour
     le texte du bouton. Par défaut, ``'Biometric Joe'``
-    :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
-    sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool unifier_texte: Optionnel, spécifie si la
+    taille de texte de ce bouton sera pris en compte lors de
+    l'utilisation de la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
-    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
-    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
- 
+    :param bool factice: Optionnel, si à ``True``,
+    le bouton ne changera pas de couleur à son survol, et
+    l'appel à dessiner_boutons() ne le mentionnera pas
+
     :return BoutonBooleen: Objet bouton booléen
     """
     bouton = BoutonBooleen(
@@ -153,20 +168,25 @@ def cree_bouton_booleen(
              )
     parse_optionnal_args(kwargs, bouton)
     if invert_color:
-        bouton.couleur_actif, bouton.couleur_desactive = bouton.couleur_desactive, bouton.couleur_actif
-        bouton.couleur_hovered_actif, bouton.couleur_hovered_desactive = bouton.couleur_hovered_desactive, bouton.couleur_hovered_actif
-    
+        bouton.couleur_actif, bouton.couleur_desactive = \
+            bouton.couleur_desactive, bouton.couleur_actif
+
+        bouton.couleur_hovered_actif, bouton.couleur_hovered_desactive = \
+            bouton.couleur_hovered_desactive, bouton.couleur_hovered_actif
+
     bouton.taille_texte = taille_texte_bouton(bouton)
 
     return bouton
 
 
-def cree_bouton_simple(
-    ax: float, ay: float, bx: float, by: float, identificateur: str, **kwargs) -> BoutonSimple:
+def cree_bouton_simple(ax: float, ay: float, bx: float, by: float,
+                       identificateur: str, **kwargs) -> BoutonSimple:
     """
-    Crée un bouton simple, c'est à dire survolable, à partir de positions relatives à la fenêtre
-    ayant comme libellé et identificateur ``identificateur``.
-    Le paramètre ``hovered`` détermine si le bouton devra changer de couleur à son survol.
+    Crée un bouton simple, c'est à dire survolable, à partir de
+    positions relatives à la fenêtre, ayant comme libellé
+    et identificateur: ``identificateur``.
+    Le paramètre ``hovered`` détermine si le bouton devra changer
+    de couleur à son survol.
     Utilise les variables globales ``largeur_fenetre`` et ``hauteur_fenetre``
 
     :param float ax: Abscisse de a relative, entre 0 et 1 inclus
@@ -175,18 +195,20 @@ def cree_bouton_simple(
     :param float by: Ordonnée de b relative, entre 0 et 1 inclus
     :param str identificateur: Nom et libéllé du bouton
 
-    :param bool hovered: Optionnel, détermine si le bouton change de couleur lors
-    de son survol. Par défaut: ``True``
-    :param str couleur_hovered: Optionnel, couleur du fond du bouton lors de son survol par la souris.
-    Par défaut: ``'#848484'``
-    :param str police: Optionnel, nom de la typographie à utiliser pour le texte du bouton.
-    Par défaut, ``'Biometric Joe'``
-    :param bool unifier_texte: Optionnel, spécifie si la taille de texte de ce bouton
-    sera pris en compte lors de l'utilisation de la fonction unifier_taille_texte()
+    :param bool hovered: Optionnel, détermine si le bouton change
+    de couleur lors de son survol. Par défaut: ``True``
+    :param str couleur_hovered: Optionnel, couleur du fond du bouton
+    lors de son survol par la souris. Par défaut: ``'#848484'``
+    :param str police: Optionnel, nom de la typographie à utiliser
+    pour le texte du bouton. Par défaut, ``'Biometric Joe'``
+    :param bool unifier_texte: Optionnel, spécifie si la
+    taille de texte de ce bouton sera pris en compte lors de l'utilisation
+    de la fonction unifier_taille_texte()
     :param bool invisible: Optionnel, rend le bouton invisible
-    :param bool factice: Optionnel, si à ``True`` le bouton ne changera ni de couleur
-    à son survol, et l'appel à dessiner_boutons() ne le mentionnera pas
-    
+    :param bool factice: Optionnel, si à ``True``, le bouton ne
+    changera pas de couleur à son survol, et l'appel à dessiner_boutons()
+    ne le mentionnera pas
+
     :return Bouton: Objet Bouton
     """
     bouton = BoutonSimple(
@@ -230,7 +252,7 @@ def parse_optionnal_args(args: dict, bouton):
 
         else:
             raise KeyError(f"L'argument {arg} n'existe pas, ou le bouton de \
-                           type {type(bouton)} ne possède pas la propriété {arg}")
+                        type {type(bouton)} ne possède pas la propriété {arg}")
 
 
 def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
@@ -243,7 +265,10 @@ def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
 
     taille_min = float('inf')
     for bouton in liste_boutons:
-        if bouton.unifier_texte and (not bouton.invisible) and (bouton.taille_texte < taille_min):
+
+        if (bouton.unifier_texte and (not bouton.invisible)
+           and (bouton.taille_texte < taille_min)):
+
             taille_min = bouton.taille_texte
 
     for bouton in liste_boutons:
@@ -255,15 +280,16 @@ def unifier_taille_texte(liste_boutons: List[Bouton]) -> None:
 
 def dessiner_bouton(bouton: Bouton) -> bool:
     """
-    Dessine un bouton et change sa couleur lors de son survol par la souris si il n'est pas invisible.
-    Et dans le cas d'un bouton booléen, change sa couleur en fontion de son attribut ``etat``.
+    Dessine un bouton et change sa couleur lors de son survol
+    par la souris, si il n'est pas invisible. Et dans le cas d'un
+    bouton booléen, change sa couleur en fontion de son attribut ``etat``.
     Renvoie ``True`` si le bouton à été survolé.
 
     :param Bouton bouton: Objet Bouton
     :return bool: Bouton survolé
     """
 
-    survole = curseur_sur_bouton(bouton) if not bouton.factice else False # False
+    survole = curseur_sur_bouton(bouton) if not bouton.factice else False
     if not bouton.invisible:
         if type(bouton) == BoutonBooleen:
             if survole:
@@ -277,7 +303,9 @@ def dessiner_bouton(bouton: Bouton) -> bool:
                 else:
                     remplissage = bouton.couleur_desactive
         else:
-            if survole and (type(bouton) != BoutonTexte and bouton.enable_hovered):
+            if (survole
+               and (type(bouton) != BoutonTexte and bouton.enable_hovered)):
+
                 remplissage = bouton.couleur_hovered
             else:
                 remplissage = bouton.couleur_fond
@@ -343,29 +371,37 @@ def taille_texte_bouton(bouton: Union[BoutonSimple, BoutonBooleen]) -> int:
     largeur_bouton = (bouton.bx - bouton.ax)*bouton.marge_texte
     taille_texte = 1
 
-
     while True:
         if type(bouton) == BoutonBooleen:
             largeur_hauteur = max(
-                fltk.taille_texte(bouton.texte_actif, bouton.police, taille_texte),
-                fltk.taille_texte(bouton.texte_desactive, bouton.police, taille_texte)
+                fltk.taille_texte(
+                    bouton.texte_actif, bouton.police, taille_texte
+                ),
+                fltk.taille_texte(
+                    bouton.texte_desactive, bouton.police, taille_texte
+                )
             )
         else:
-            largeur_hauteur = fltk.taille_texte(bouton.texte, bouton.police, taille_texte)
+            largeur_hauteur = fltk.taille_texte(
+                bouton.texte, bouton.police, taille_texte
+            )
 
-        if largeur_hauteur[0] > largeur_bouton or largeur_hauteur[1] > hauteur_bouton:
+        if (largeur_hauteur[0] > largeur_bouton
+           or largeur_hauteur[1] > hauteur_bouton):
             break
         taille_texte += 1
 
     return taille_texte
 
 
-
 def intervertir_pos_boutons(bouton1: Bouton, bouton2: Bouton):
     """
     Intervertit la position de deux boutons
     """
-    bouton1.ay, bouton1.by, bouton2.ay, bouton2.by = bouton2.ay, bouton2.by, bouton1.ay, bouton1.by
-    bouton1.ax, bouton1.bx, bouton2.ax, bouton2.bx = bouton2.ax, bouton2.bx, bouton1.ax, bouton1.bx
+    bouton1.ay, bouton1.by, bouton2.ay, bouton2.by\
+        = bouton2.ay, bouton2.by, bouton1.ay, bouton1.by
+
+    bouton1.ax, bouton1.bx, bouton2.ax, bouton2.bx\
+        = bouton2.ax, bouton2.bx, bouton1.ax, bouton1.bx
 
     return None

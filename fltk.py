@@ -84,7 +84,6 @@ class CustomCanvas:
         # canvas attached to the root object
         self.canvas = tk.Canvas(self.root, width=width,
                                 height=height, highlightthickness=0)
-        
 
         # adding the canvas to the root window and giving it focus
         self.canvas.pack()
@@ -170,8 +169,9 @@ class FenetreDejaCree(Exception):
 
 def cree_fenetre(largeur, hauteur, titre='tk', frequence=100):
     """
-    Crée une fenêtre avec un titre, de dimensions ``largeur`` x ``hauteur`` pixels,
-    et avec une frequence de rafraîchissement de 100 images par secondes par défaut
+    Crée une fenêtre avec un titre, de dimensions ``largeur`` x ``hauteur``
+    pixels, et avec une frequence de rafraîchissement de 100 images par
+    secondes par défaut
     :rtype:
     """
     global __canevas
@@ -195,7 +195,7 @@ def ferme_fenetre():
 
 def mise_a_jour():
     """
-    Met à jour la fenêtre. Les dessins ne sont affichés qu'après 
+    Met à jour la fenêtre. Les dessins ne sont affichés qu'après
     l'appel à  cette fonction.
     """
     if __canevas is None:
@@ -246,11 +246,11 @@ def fleche(ax, ay, bx, by, couleur='black', epaisseur=1, tag=''):
     """
     x, y = (bx - ax, by - ay)
     n = (x**2 + y**2)**.5
-    x, y = x/n, y/n    
+    x, y = x/n, y/n
     points = [bx, by, bx-x*5-2*y, by-5*y+2*x, bx-x*5+2*y, by-5*y-2*x]
     return __canevas.canvas.create_polygon(
-        points, 
-        fill=couleur, 
+        points,
+        fill=couleur,
         outline=couleur,
         width=epaisseur,
         tag=tag)
@@ -268,8 +268,8 @@ def polygone(points, couleur='black', remplissage='', epaisseur=1, tag=''):
     :return: identificateur d'objet
     """
     return __canevas.canvas.create_polygon(
-        points, 
-        fill=remplissage, 
+        points,
+        fill=remplissage,
         outline=couleur,
         width=epaisseur,
         tag=tag)
@@ -300,7 +300,7 @@ def rectangle(ax, ay, bx, by,
 
 
 def cercle(x, y, r, couleur='black', remplissage='', epaisseur=1, tag=''):
-    """ 
+    """
     Trace un cercle de centre ``(x, y)`` et de rayon ``r`` en noir.
 
     :param float x: abscisse du centre
@@ -389,7 +389,7 @@ def afficher_image(x, y, image, ancrage='center', tag=''):
             tkimage = tk.PhotoImage(file=image)
     else:
         tkimage = image
-    
+
     img_object = __canevas.canvas.create_image(
         x, y, anchor=ancrage, image=tkimage, tag=tag
     )
@@ -413,8 +413,7 @@ def taille_image(fichier) -> tuple:
     return None
 
 
-def redimensionner_image(fichier, coeff:float,
-                         reechantillonage=None):
+def redimensionner_image(fichier, coeff: float, reechantillonage=None):
     """
     Ouvre une image et la redimensionne avec un coefficient multiplicateur,
     il est également possible d'appliquer un filtre de réchantillonage pour
@@ -424,7 +423,7 @@ def redimensionner_image(fichier, coeff:float,
     Bilinéaire: ``2``
     Bicubique: ``3``
     Box: ``4``
-    Hamming: ``5`` 
+    Hamming: ``5``
 
     :param fichier: Fichier de l'image à redimensioner
     :param float coeff: Coefficient de redimensionnement
@@ -437,15 +436,18 @@ def redimensionner_image(fichier, coeff:float,
         with Image.open(fichier) as img:
             taille = img.size
             taille_coeff = (int(taille[0]*coeff), int(taille[1]*coeff))
-            return ImageTk.PhotoImage(img.resize(taille_coeff, reechantillonage))
+            return ImageTk.PhotoImage(
+                img.resize(taille_coeff, reechantillonage)
+            )
     else:
         PILError()
         return None
 
 # Texte
 
-def texte(x, y, chaine,
-          couleur='black', ancrage='nw', police='Helvetica', taille=24, tag=''):
+
+def texte(x, y, chaine, couleur='black', ancrage='nw',
+            police='Helvetica', taille=24, tag=''):
     """
     Affiche la chaîne ``chaine`` avec ``(x, y)`` comme point d'ancrage (par
     défaut le coin supérieur gauche).

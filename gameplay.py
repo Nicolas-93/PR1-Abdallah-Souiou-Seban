@@ -1,10 +1,11 @@
-from typing import List, Union, Tuple
+from typing import List, Tuple
 from dataclasses import dataclass
 import bouton
 from bouton import Bouton
 import cfg
 import graphiques
 import music
+
 
 @dataclass
 class Allumette:
@@ -15,45 +16,52 @@ class Allumette:
     selection = False
 
 
-def appliquer_selection_allumettes(
-    indice_coups_possibles: int, increment_clic: int, coups_possibles: list,
-    liste_allumettes: List[List[Allumette]], rangee: str):
-
+def appliquer_selection_allumettes(indice_coups_possibles: int,
+                                   increment_clic: int,
+                                   coups_possibles: list,
+                                   liste_allumettes: List[List[Allumette]],
+                                   rangee: str) -> int:
     """
-    Sélectionne les allumettes en fonction de la valeur de ``indice_coups_possibles`` qui représente
-    le curseur de la liste des coups possibles ``coups_possibles``. Ce curseur est dé/incrémenté dans les
-    limites de la liste ``coups_possibles`` mais aussi dans la limite des allumettes restantes
-    dans la rangée ``rangee`` demandée.
+    Sélectionne les allumettes en fonction de la valeur
+    de ``indice_coups_possibles`` qui représente le curseur de
+    la liste des coups possibles ``coups_possibles``.
+    Ce curseur est dé/incrémenté dans les limites de
+    la liste ``coups_possibles`` mais aussi dans la limite
+    des allumettes restantes dans la rangée ``rangee`` demandée.
 
-    :param int indice_coups_possibles: Curseur/indice par rapport à la liste ``coups_possibles``
-    :param int increment_clic: Incrémentation +/- 1
+    :param int indice_coups_possibles: Curseur/indice par rapport
+    à la liste ``coups_possibles``
+    :param int increment_clic: Incrémentation +/- 1 du clic
     :param list coups_possibles: Liste représentant les coups possibles
     :param list liste_allumettes: Liste de rangées d'objets ``Allumette``s
     :param str rangee: Numéro de la rangée où la sélection sera réalisée
 
-    Supprimer les rangées vides de la liste_allumettes!!!!!
+    :param return: Nouvel indice (curseur) de coups_possibles
     """
 
-    if (rangee != None and rangee.isnumeric()):
+    if (rangee is not None and rangee.isnumeric()):
         rangee = int(rangee)
 
-        # Déterminer si l'indice de la selection demandé peut devenir valable avec l'increment du clic (+-1)
-        if ((0 <= indice_coups_possibles + increment_clic <= len(coups_possibles)-1) 
-        and coups_possibles[indice_coups_possibles + increment_clic] <= len(liste_allumettes[rangee])):
-            
+        if ((0 <= indice_coups_possibles + increment_clic
+            <= len(coups_possibles)-1)
+            and coups_possibles[indice_coups_possibles + increment_clic]
+                <= len(liste_allumettes[rangee])):
+
             indice_coups_possibles += increment_clic
-            nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
+            nb_a_selectionner = coups_possibles[indice_coups_possibles]
 
         elif increment_clic == -1 and indice_coups_possibles == -1:
-            nombre_allumettes_a_selectionner = 0
-        
+            nb_a_selectionner = 0
+
         else:
-            nombre_allumettes_a_selectionner = coups_possibles[indice_coups_possibles]
-        
-        graphiques.afficher_selection_allumettes(nombre_allumettes_a_selectionner, liste_allumettes, rangee)
+            nb_a_selectionner = coups_possibles[indice_coups_possibles]
+
+        graphiques.afficher_selection_allumettes(
+            nb_a_selectionner, liste_allumettes, rangee
+        )
 
     return indice_coups_possibles
-    
+
 
 def reset_selection_rangee(liste_rangee: list) -> None:
     """
@@ -69,7 +77,8 @@ def reset_selection_rangee(liste_rangee: list) -> None:
     return None
 
 
-def jouer_tour(liste_allumettes: List[List[Allumette]], liste_boutons_jeu: List[Bouton]):
+def jouer_tour(liste_allumettes: List[List[Allumette]],
+               liste_boutons_jeu: List[Bouton]):
     """
     Supprime les allumettes selctionées dans la liste d'allumettes,
     et inverse la position des boutons 'Joueur' et 'Fin de tour'
@@ -96,8 +105,8 @@ def jouer_tour(liste_allumettes: List[List[Allumette]], liste_boutons_jeu: List[
 
 def hitbox_marienbad(liste_allumettes: List[List[Allumette]]) -> List[Bouton]:
     """
-    Crée un bouton pour chaque rangée de la ``liste_allumettes``, le texte de chaque bouton
-    est le numéro de la rangée (Débute à 0).
+    Crée un bouton pour chaque rangée de la ``liste_allumettes``,
+    le texte de chaque bouton est le numéro de la rangée (Débute à 0).
 
     :param List[List[Allumette]] liste_allumettes: Liste d'objets ``Bouton``s
     :return list: Liste d'objets ``Bouton``s
@@ -110,33 +119,36 @@ def hitbox_marienbad(liste_allumettes: List[List[Allumette]]) -> List[Bouton]:
                 rangee[0].ay/cfg.hauteur_fenetre,
                 rangee[-1].bx/cfg.largeur_fenetre,
                 rangee[-1].by/cfg.hauteur_fenetre,
-                identificateur = str(i),
+                identificateur=str(i),
                 )
         )
-    
+
     return hitbox_allumettes
 
-def check_hitbox(nom_bouton: str, liste_allumettes: List[List[Allumette]],
-                 indice_coups_possibles: int, bouton_precedent: str, tev: str) -> Tuple[int, str]:
-    """
-    Gère la logique liée à la selection et les appuis sur les boutons correspondants
-    """
-    if tev == "ClicDroit":
-        retour = 0
-    else:
-        retour = -1
 
-    if nom_bouton != None and nom_bouton.isnumeric():
+def check_hitbox(liste_allumettes: List[List[Allumette]],
+                 indice_coups_possibles: int,
+                 nom_bouton: str, bouton_precedent: str,
+                 tev: str) -> Tuple[int, str]:
+    """
+    Gère la logique liée à la selection et les appuis
+    sur les boutons correspondants
+    """
+
+    retour = 0 if tev == "ClicDroit" else -1
+
+    if nom_bouton is not None and nom_bouton.isnumeric():
         music.SoundAllu()
-        if bouton_precedent != None:
-            if bouton_precedent != nom_bouton:
+        if bouton_precedent is not None:
+            if bouton_precedent is not nom_bouton:
                 reset_selection_rangee(liste_allumettes[int(bouton_precedent)])
                 return retour, nom_bouton
         return indice_coups_possibles, nom_bouton
-    return indice_coups_possibles, bouton_precedent        
-        
+    return indice_coups_possibles, bouton_precedent
 
-def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[List[Allumette]]:
+
+def initialiser_allumettes(
+        liste_marienbad=[cfg.nombre_allumettes]) -> List[List[Allumette]]:
     """
     Initialise une liste d'objets ``Allumette``, dont les coordonnées
     ont été adaptées à la taille de la fenêtre par leurs constantes globales
@@ -153,17 +165,18 @@ def initialiser_allumettes(liste_marienbad=[cfg.nombre_allumettes]) -> List[List
 
     espacement_y = cfg.hauteur_fenetre / (nb_rangees) - marge
     y_max = (nb_rangees-1) * espacement_y + cfg.hauteur_fenetre
-    y_centre = (cfg.hauteur_fenetre - y_max)/2 + (cfg.hauteur_fenetre - cfg.hauteur_allumette)/2
+    y_centre = (cfg.hauteur_fenetre - y_max)/2 +\
+               (cfg.hauteur_fenetre - cfg.hauteur_allumette)/2
 
     for j in range(nb_rangees):
         ligne_allumettes = []
         for i in range(liste_marienbad[j]):
             ligne_allumettes.append(
                 Allumette(
-                    ax = i * espacement_x + x_centre,
-                    ay = j * espacement_y + y_centre,
-                    bx = i * espacement_x + x_centre + cfg.largeur_allumette,
-                    by = j * espacement_y + y_centre + cfg.hauteur_allumette
+                    ax=i * espacement_x + x_centre,
+                    ay=j * espacement_y + y_centre,
+                    bx=i * espacement_x + x_centre + cfg.largeur_allumette,
+                    by=j * espacement_y + y_centre + cfg.hauteur_allumette
                 )
             )
         liste_allumettes.append(ligne_allumettes)
@@ -187,7 +200,8 @@ def gen_lst_coup_possibles(k: int) -> list:
     return [x for x in range(1, k+1)]
 
 
-def coup_possible(liste_allumettes: List[Allumette], coups_possibles: list) -> bool:
+def coup_possible(liste_allumettes: List[Allumette],
+                  coups_possibles: list) -> bool:
     """
     Retourne ``True`` si le prochain joueur pourra prélever une allumette.
 

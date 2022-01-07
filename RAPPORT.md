@@ -57,11 +57,11 @@ Il faudra aussi vous fournir de Pillow
 L'installation de Pygame, bien qu'optionnel, est recommandée pour pouvoir profiter des sons et de l'ambiance sonore.
 - Pour plus d'explications sur comment installer Pygame, rendez-vous: https://www.pygame.org/wiki/GettingStarted
 
-### Une fois fais, à l'aide du terminal déplacez vous dans le répertoire où vous avez placé le dossier et éxécuter nim.py dans votre terminal !
+### A l'aide du terminal déplacez vous dans le répertoire où vous avez placé le dossier et exécutez nim.py dans votre terminal !
 ## **Règles de jeu :**
 Le jeu de Nim peut se jouer de deux façons:
-- Le jeu classique, où vous n'avez qu'une ligne d'allumettes et une liste de coups possibles prédéfinies.
-- Le jeu de Marienbad, où vous avez plusieurs lignes d'allumettes mais vous pouvez sélectionner autant d'allumettes sur une rangée que vous voulez.
+- Le jeu classique, où vous n'avez qu'une ligne d'allumettes, et une liste de coups possibles prédéfinies.
+- Le jeu de Marienbad, où vous avez plusieurs lignes d'allumettes, mais vous pouvez sélectionner autant d'allumettes sur une rangée que vous voulez.
 
 Chacun de ces jeux peut se jouer avec deux règles (voir Utilisation des menus):
 - Le mode normal, où le gagnant de la partie est celui qui récolte la dernière allumette.

@@ -11,11 +11,11 @@ except:
     pygame_available = False
     sound = False
     cfg.son = False
-    print("Téléchargez pygame pour une meilleure expérience.")
+    print("Installez pygame pour une meilleure expérience.")
 
 def initialisation():
     if pygame_available:
-        global menu_bleep, menu_depart, bye_bye, change
+        global menu_bleep, menu_depart, change
         menu_bleep = pygame.mixer.Sound(os.path.join('sound', 'MenuBleep.wav'))
         menu_depart = pygame.mixer.Sound(os.path.join('sound', 'MenuAccept.wav'))
         change = pygame.mixer.Sound(os.path.join('sound', 'MenuWoosh.wav'))
@@ -27,17 +27,14 @@ def SoundAllu():
         boop.play()
 
 def BoutonAccept():
-    global menu_bleep
     if pygame_available and sound:
         menu_bleep.play()
 
 def GameStart():
-    global menu_depart
     if pygame_available and sound:
         menu_depart.play()
 
 def MenuChange():
-    global change
     if pygame_available and sound:
         change.play()
 

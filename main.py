@@ -87,7 +87,7 @@ def fin(joueur: int):
     bouton.unifier_taille_texte(liste_boutons_fin)
 
     music.song('Neutral')
-    
+
     if cfg.mode_solo and cfg.mode_difficile:
         message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
         music.song('WORST END')
@@ -112,9 +112,10 @@ def fin(joueur: int):
 
             nom_bouton = bouton.dessiner_boutons(liste_boutons_fin)
             fltk.texte(
-                cfg.largeur_fenetre/2, 0.2*cfg.hauteur_fenetre,
+                cfg.largeur_fenetre/2, 0.25*cfg.hauteur_fenetre,
                 message, couleur="white", ancrage='center',
-                police='Biometric Joe', taille=20
+                police='Biometric Joe',
+                taille=liste_boutons_fin[0].taille_texte//2
             )
 
             if tev == 'Quitte':
@@ -148,7 +149,7 @@ def jeu(liste_marienbad):
         'allumette-brulee.png', coeff
     )
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
-    adversaire = ('3X-PL0-X10N' if cfg.mode_difficile else 'T3R3Z1'
+    adversaire = (('3X-PL0-X10N' if cfg.mode_difficile else 'T3R3Z1')
                   if cfg.mode_solo else
                   'Joueur 2')
 
@@ -373,7 +374,8 @@ def options():
                     music.MenuChange()
                     break
 
-                if cfg.nombre_allumettes < 1: cfg.nombre_allumettes = 1
+                if cfg.nombre_allumettes < 1:
+                    cfg.nombre_allumettes = 1
                 liste_boutons_options[2].texte = cfg.nombre_allumettes
 
             if tev == 'Quitte':
