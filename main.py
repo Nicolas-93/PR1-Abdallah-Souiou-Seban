@@ -175,7 +175,7 @@ def jeu(liste_marienbad):
 
     if (cfg.mode_difficile and cfg.mode_solo
         and ((len(liste_allumettes) == 1 and coups_gagnants[len(liste_allumettes[0])] != None)
-        or   (len(liste_allumettes) >= 2 and int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))]))))):
+        or   (len(liste_allumettes) >= 2 and (int(solo.nimsomme([len(liste_allumettes[x]) for x in range(len(liste_allumettes))])) ^ cfg.misere)))):
         joueur = 2
 
     liste_boutons_jeu = [
@@ -307,7 +307,7 @@ def options():
             0.5, 0.15, 0.95, 0.25,
             'Difficulte',
             cfg.mode_difficile,
-            'difficile', 'facile',
+            'hardcore', 'facile',
             invert_color=True, invisible=(not cfg.mode_solo)
         ),
         bouton.cree_bouton_booleen(
@@ -357,7 +357,7 @@ def options():
                 if nom_bouton == 'Animation':
                     cfg.animation = not cfg.animation
                     liste_boutons_options[9].etat = cfg.animation
-                if nom_bouton == 'Son':
+                if nom_bouton == 'Son' and music.pygame_available:
                     cfg.son = not cfg.son
                     liste_boutons_options[11].etat = cfg.son
                     music.toggle_sound()
@@ -375,7 +375,9 @@ def options():
 
 
 if __name__ == "__main__":
-
-    fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre, 'Jeux de Nim')
-    music.song('Neutral')
-    menu()
+    if fltk.PIL_AVAILABLE:
+        fltk.cree_fenetre(cfg.largeur_fenetre, cfg.hauteur_fenetre, 'Jeux de Nim')
+        music.song('Neutral')
+        menu()
+    else:
+        print("Veuillez installer PIL pour le bon fonctionnement du projet.")
