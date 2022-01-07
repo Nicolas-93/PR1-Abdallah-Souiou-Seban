@@ -19,11 +19,15 @@ def initialisation():
         menu_bleep = pygame.mixer.Sound(os.path.join('sound', 'MenuBleep.wav'))
         menu_depart = pygame.mixer.Sound(os.path.join('sound', 'MenuAccept.wav'))
         change = pygame.mixer.Sound(os.path.join('sound', 'MenuWoosh.wav'))
+        pygame.mixer.Sound.set_volume(menu_bleep, 0.5)
+        pygame.mixer.Sound.set_volume(menu_depart, 0.4)
+        pygame.mixer.Sound.set_volume(change, 0.5)
 
 def SoundAllu():
     if pygame_available and sound:
         boopie = random.randint(0,5)
         boop = pygame.mixer.Sound(os.path.join('sound', f'DNATiny{boopie}.wav'))
+        pygame.mixer.Sound.set_volume(boop, 0.8)
         boop.play()
 
 def BoutonAccept():
@@ -56,3 +60,4 @@ def song(name):
         pygame.init()
         pygame.mixer.music.load(os.path.join('sound', 'song', f'{name}.mp3'))
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.6)
