@@ -14,6 +14,9 @@ except:
     print("Téléchargez pygame pour une meilleure expérience.")
 
 def initialisation():
+    """
+    Initialise tous les effets sonores ainsi que leurs volumes.
+    """
     if pygame_available:
         global menu_bleep, menu_depart, bye_bye, change
         menu_bleep = pygame.mixer.Sound(os.path.join('sound', 'MenuBleep.wav'))
@@ -24,6 +27,9 @@ def initialisation():
         pygame.mixer.Sound.set_volume(change, 0.5)
 
 def SoundAllu():
+    """
+    Fais un bruitage sonore aléatoire.
+    """
     if pygame_available and sound:
         boopie = random.randint(0,5)
         boop = pygame.mixer.Sound(os.path.join('sound', f'DNATiny{boopie}.wav'))
@@ -31,21 +37,33 @@ def SoundAllu():
         boop.play()
 
 def BoutonAccept():
+    """
+    Joue un son spécifique si pygame est disponible et si le son est activé.
+    """
     global menu_bleep
     if pygame_available and sound:
         menu_bleep.play()
 
 def GameStart():
+    """
+    Joue un son spécifique si pygame est disponible et si le son est activé.
+    """
     global menu_depart
     if pygame_available and sound:
         menu_depart.play()
 
 def MenuChange():
+    """
+    Joue un son spécifique si pygame est disponible et si le son est activé.
+    """
     global change
     if pygame_available and sound:
         change.play()
 
 def toggle_sound():
+    """ 
+    Désactive la musique et les sons ou les réactive en changeant l'état de "sound"
+    """
     global sound
     if pygame_available:
         pygame.mixer.music.stop()
@@ -56,6 +74,11 @@ def toggle_sound():
 
 
 def song(name):
+    """
+    Prends en entrée le nom du fichier mp3 pour le jouer.
+
+    :param str: nom du fichier à jouer.
+    """
     if pygame_available and sound:
         pygame.init()
         pygame.mixer.music.load(os.path.join('sound', 'song', f'{name}.mp3'))

@@ -16,6 +16,14 @@ class AluChute:
 
 
 def initialisation(number):
+    """
+    Prends en entrée un nombre et renvoie une liste contenant des allumettes avec leur image, leur position,
+    l'angle, et la vitesse de chute générée aléatoirement.
+
+    :param int: nombre d'allumettes à faire tomber
+    :return list: Liste d'allumettes tombantes
+    """
+
     liste = []
 
     with Image.open('allumette.png') as img1,\
@@ -49,16 +57,31 @@ def initialisation(number):
 
 
 def resize(image):
+    """
+    Prends en entrée une image PIL qu'elle redimenssionne.
+
+    :param obj: l'image à redimenssionner
+    """
     (width, height) = (image.width // 10, image.height // 10)
     return image.resize((width, height), resample=Image.BICUBIC)
 
 
 def chute(elem):
+    """
+    Prends un élément et modifie sa valeur de position verticale selon 
+    sa vitesse
+    """
     elem.ay += elem.speed
     elem.ay = elem.ay % (cfg.hauteur_fenetre + elem.height)
 
 
 def dessiner(liste):
+    """
+    Prends en paramètre une liste, et affiche chaque élément de la liste
+    selon leurs valeurs de position et selon leur image
+
+    :param list: liste d'allumettes pour les faire tomber
+    """
     for elem in liste:
         fltk.afficher_image(elem.ax, elem.ay, elem.Alu, ancrage='s')
         chute(elem)
