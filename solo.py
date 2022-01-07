@@ -36,7 +36,7 @@ def nimsomme(liste_allumettes: List[int]) -> str:
     :param list liste_allumettes: liste du nombre d'allumettes par rangée
     :return str: nimsomme de la liste des allumettes en Marienbad
     """
-    table_binaire, xor, nimsomme = [], 0, '0'
+    table_binaire, xor, nimsomme = [], 0, ''
     if max(liste_allumettes):
         for nb_allumettes in liste_allumettes:
             digits = int(math.log(max(liste_allumettes), 2)) + 1
@@ -68,6 +68,7 @@ def coups_gagnants_marienbad(liste_allumettes: List[int]) -> Tuple[int, int]:
         for coup in range(1, new_allumettes[rangee] + 1):
             liste_arrivee = new_allumettes[::]
             liste_arrivee[rangee] -= coup
+            print(nimsomme(liste_arrivee))
             if not cfg.misere and nimsomme(liste_arrivee) == 0:
                 return rangee, coup - 1
             if cfg.misere and int(nimsomme(liste_arrivee)) == 1:
