@@ -15,7 +15,7 @@ class AluChute:
 
 def initialisation(number):
     liste = []
-    with Image.open('allumette.png') as img1, Image.open('allumette-brûée.png') as img2:
+    with Image.open('allumette.png') as img1, Image.open('allumette-brulee.png') as img2:
         imagechute1 = resize(img1)
         imagechute2 = resize(img2)
 

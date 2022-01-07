@@ -8,15 +8,6 @@ import solo
 import random
 import music
 
-# README
-# Mode joueur solo
-# Support des champs de texte
-# Supporter les textes sur plusieurs lignes dans bouton.py
-# Ajuster/Zoomer les allumettes de manière à optimiser l'espace disponible
-
-# Animer le menu avec des allumettes se déplaçant en diagonale
-# Effet de disparition des allumettes: les allumer!!
-
 def menu():
     global image_allumette, image_allumette_brulee, liste_chute
     coeff = graphiques.calcul_taille_image(
@@ -152,7 +143,7 @@ def jeu(liste_marienbad):
         (cfg.largeur_allumette, cfg.hauteur_allumette)
     )
     image_allumette = fltk.redimensionner_image('allumette.png', coeff)
-    image_allumette_brulee = fltk.redimensionner_image('allumette-brûée.png', coeff)
+    image_allumette_brulee = fltk.redimensionner_image('allumette-brulee.png', coeff)
 
     bouton_precedent = None
     indice_coups_possibles = -1
