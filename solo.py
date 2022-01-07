@@ -14,6 +14,7 @@ def coups_gagnants(
 
     :param int nb_allumettes_depart: nombre d'allumettes au début du jeu
     :param list coups_possibles: liste des coups possibles
+    :return list: liste de coups gagnants pour le jeu classique
     """
     liste_positions, liste_coups = [cfg.misere], [cfg.misere]
     for nb_allumettes in range(1, nb_allumettes_depart + 1):
@@ -29,12 +30,13 @@ def coups_gagnants(
 
 def nimsomme(liste_allumettes: List[int]) -> str:
     """
-    Retourne la nimsomme de la liste des allumettes passée en paramètre
-    convertie en binaire pour le jeu Marienbad.
+    Retourne la nimsomme de la liste des allumettes par rangée
+    passée en paramètre convertie en binaire pour le jeu Marienbad.
 
     :param list liste_allumettes: liste du nombre d'allumettes par rangée
+    :return str: nimsomme de la liste des allumettes en Marienbad
     """
-    table_binaire, xor, bilan = [], 0, '0'
+    table_binaire, xor, nimsomme = [], 0, '0'
     if max(liste_allumettes):
         for nb_allumettes in liste_allumettes:
             digits = int(math.log(max(liste_allumettes), 2)) + 1
@@ -42,8 +44,8 @@ def nimsomme(liste_allumettes: List[int]) -> str:
         for i in range(int(math.log(max(liste_allumettes), 2)) + 1):
             for x in [int(row[i]) for row in table_binaire]:
                 xor = xor ^ x
-            bilan += str(xor)
-    return bilan
+            nimsomme += str(xor)
+    return nimsomme
 
 
 def coups_gagnants_marienbad(liste_allumettes: List[int]) -> Tuple[int, int]:
@@ -53,6 +55,7 @@ def coups_gagnants_marienbad(liste_allumettes: List[int]) -> Tuple[int, int]:
     Retourne None si la position est perdante pour le joueur.
 
     :param list liste_allumettes: liste du nombre d'allumettes par rangée
+    :return tuple: nombre d'allumettes à prendre et leur rangée
     """
     for rangee in range(len(liste_allumettes)):
         for coup in range(liste_allumettes[rangee] + 1):
@@ -76,6 +79,7 @@ def coup_bot(liste_allumettes: List[int],
     :param list liste_allumettes: liste du nombre d'allumettes par rangée
     :param list coups_gagnants: liste des coups gagnants en jeu classique
     :param list coups_possibles: liste des coups possibles en jeu classique
+    :return tuple: nombre d'allumettes à prendre et leur rangée
     """
     rangee_coup, coup = 0, 0
     if not cfg.mode_difficile:
