@@ -7,15 +7,6 @@ import animation
 import solo
 import music
 
-# README
-# Mode joueur solo
-# Support des champs de texte
-# Supporter les textes sur plusieurs lignes dans bouton.py
-# Ajuster/Zoomer les allumettes de manière à optimiser l'espace disponible
-
-# Animer le menu avec des allumettes se déplaçant en diagonale
-# Effet de disparition des allumettes: les allumer!!
-
 
 def menu():
 
@@ -95,16 +86,15 @@ def fin(joueur: int):
     ]
     bouton.unifier_taille_texte(liste_boutons_fin)
 
+    music.song('Neutral')
+    
     if cfg.mode_solo and cfg.mode_difficile:
+        message = "Comment avez pu croire\nà avoir une chance\nface à 3X-PL0-X10N ?"
         music.song('WORST END')
-    else:
-        music.song('Neutral')
-    if cfg.misere:
-        message = f"Quel dommage Joueur {joueur},\
-        \ntu as pris l'allumette de trop !"
-    elif cfg.mode_solo and cfg.mode_difficile:
-        message = "Comment pouvez croire\nà avoir une chance\
-        \ncontre 3X-PL0-X10N ?"
+
+    elif cfg.misere:
+        message = f"Quel dommage Joueur {joueur},\ntu as pris l'allumette de trop !\n:("
+
     else:
         message = f"Bien joué Joueur {joueur}!\nTu as chapardé la\
         \ndernière allumette !"
@@ -155,7 +145,7 @@ def jeu(liste_marienbad):
     )
     image_allumette = fltk.redimensionner_image('allumette.png', coeff)
     image_allumette_brulee = fltk.redimensionner_image(
-        'allumette-brûée.png', coeff
+        'allumette-brulee.png', coeff
     )
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     adversaire = ('3X-PL0-X10N' if cfg.mode_difficile else 'T3R3Z1'
