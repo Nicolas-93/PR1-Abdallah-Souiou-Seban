@@ -1,3 +1,8 @@
+"""
+PROJET 1, TP 11 GROUPE 4
+Amal Abdallah, Nicolas Seban, Adam Souiou
+"""
+
 # Sobre bibliothèque pour créer, gérer, et afficher des boutons.
 # Permet la création de boutons cliquables simples, de boutons
 # booléens qui peuvent enregistrer leur état et l'afficher

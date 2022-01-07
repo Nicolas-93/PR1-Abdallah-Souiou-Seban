@@ -1,3 +1,8 @@
+"""
+PROJET 1, TP 11 GROUPE 4
+Amal Abdallah, Nicolas Seban, Adam Souiou
+"""
+
 import cfg
 import math
 import random

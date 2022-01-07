@@ -1,3 +1,8 @@
+"""
+PROJET 1, TP 11 GROUPE 4
+Amal Abdallah, Nicolas Seban, Adam Souiou
+"""
+
 import fltk
 from dataclasses import dataclass
 from PIL import Image, ImageTk
@@ -69,7 +74,7 @@ def resize(image: object) -> object:
 
 def chute(elem: AluChute) -> None:
     """
-    Prends un élément et modifie sa valeur de position verticale selon 
+    Prends un élément et modifie sa valeur de position verticale selon
     sa vitesse
     """
     elem.ay += elem.speed
