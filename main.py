@@ -160,13 +160,11 @@ def jeu(liste_marienbad):
     adversaire = ("3X-PL0-X10N" if cfg.mode_difficile else "T3R3Z1") if cfg.mode_solo else "Joueur 2"
     liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
     coups_possibles = cfg.coups_possibles
-    coup, rangee_coup = 0, 0
     if len(liste_marienbad) > 1:
         coups_possibles = range(1, max(liste_marienbad) + 1)
 
     coups_gagnants = solo.coups_gagnants(cfg.nombre_allumettes, coups_possibles, cfg.misere)
-
-    for coup in coups_gagnants: pass
+    coup, rangee_coup = coups_gagnants[len(liste_allumettes[0])], 0
 
     if cfg.mode_solo and cfg.mode_difficile:
         music.song('3X-PL0-X10N')

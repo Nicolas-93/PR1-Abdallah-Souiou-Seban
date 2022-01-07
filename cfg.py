@@ -10,8 +10,8 @@ animation                           =   True
 zoom_allumette                      =   0.5
 image_allumette                     =   'allumette.png'
 image_allumette_brulee              =   'allumette-brûée.png'
-mode_solo                           =   False
-mode_difficile                      =   False
+mode_solo                           =   True
+mode_difficile                      =   True
 son                                 =   True
 
 taille_image                        =   fltk.taille_image(image_allumette)
