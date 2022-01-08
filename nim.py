@@ -115,6 +115,7 @@ def fin(joueur: int):
 
             if tev == 'Quitte':
                 fltk.ferme_fenetre()
+                exit()
 
             elif tev == "ClicGauche":
                 if nom_bouton == 'Menu':
@@ -124,6 +125,7 @@ def fin(joueur: int):
                     menu()
                 if nom_bouton == 'Quitter':
                     fltk.ferme_fenetre()
+                    exit()
 
             fltk.mise_a_jour()
 
@@ -363,6 +365,7 @@ def options():
                 liste_boutons_options[2].texte = cfg.nombre_allumettes
 
             if tev == 'Quitte':
+                fltk.ferme_fenetre()
                 exit()
 
             fltk.mise_a_jour()
