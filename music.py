@@ -25,6 +25,7 @@ def initialisation() -> None:
     Initialise tous les effets sonores ainsi que leurs volumes.
     """
     if pygame_available:
+        pygame.init()
         global menu_bleep, menu_depart, change
         menu_bleep = pygame.mixer.Sound(os.path.join('sound', 'MenuBleep.wav'))
         menu_depart = pygame.mixer.Sound(os.path.join('sound', 'MenuAccept.wav'))
@@ -92,7 +93,6 @@ def song(name: str) -> None:
     :param str: nom du fichier à jouer.
     """
     if pygame_available and sound:
-        pygame.init()
         pygame.mixer.music.load(os.path.join('sound', 'song', f'{name}.mp3'))
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)

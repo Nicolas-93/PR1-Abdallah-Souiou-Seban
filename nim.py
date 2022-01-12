@@ -15,7 +15,6 @@ import music
 liste_boutons_options = None
 def menu():
 
-    music.initialisation()
     liste_boutons_menu = [
         bouton.cree_bouton_simple(
             0.2, 0.45, 0.8, 0.55,
@@ -384,6 +383,7 @@ if __name__ == "__main__":
             cfg.largeur_fenetre, cfg.hauteur_fenetre,
             'Jeux de Nim'
         )
+        music.initialisation()
         liste_chute = animation.initialisation(cfg.nombre_allumettes_animation)
         coeff = graphiques.calcul_taille_image(
             cfg.taille_image,
