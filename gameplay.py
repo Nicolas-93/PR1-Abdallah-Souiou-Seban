@@ -11,6 +11,7 @@ import cfg
 import graphiques
 import music
 import solo
+import fltk
 
 
 @dataclass
@@ -153,41 +154,60 @@ def check_hitbox(liste_allumettes: List[List[Allumette]],
     return indice_coups_possibles, bouton_precedent
 
 
-def initialiser_allumettes(
-        liste_marienbad=[cfg.nombre_allumettes]) -> List[List[Allumette]]:
+
+def initialiser_allumettes(liste_marienbad) -> Tuple[List[List[Allumette]], Tuple[float, float]]:
     """
-    Initialise une liste d'objets ``Allumette``, dont les coordonnées
-    ont été adaptées à la taille de la fenêtre par leurs constantes globales
+    Initialise une liste d'objets ``Allumette``, représentées par des cases
+    dont les coordonnées ont été adaptées à la taille de la fenêtre par
+    leurs constantes globales
+
+    :param list liste_marienbad: Liste d'entiers représentant le
+    nombre d'allumettes par lignes
+    :return: Tuple composé de la liste d'objets ``Allumette`` et d'un tuple
+    représantant la largeur et la hauteur des cases
     """
 
     liste_allumettes = []
-    nb_rangees = len(liste_marienbad)
-    nombre_allumettes_max = max(liste_marienbad)
-    marge = cfg.hauteur_fenetre*0.1
 
-    espacement_x = cfg.largeur_fenetre / (nombre_allumettes_max+1)
-    x_max = (nombre_allumettes_max-1) * espacement_x + cfg.largeur_allumette
-    x_centre = (cfg.largeur_fenetre - x_max)/2
+    if len(liste_marienbad) == 1:
+        mode_classique = True
+        liste_marienbad = [0, liste_marienbad[0], 0]
+    else:
+        mode_classique = False
 
-    espacement_y = cfg.hauteur_fenetre / (nb_rangees) - marge
-    y_max = (nb_rangees-1) * espacement_y + cfg.hauteur_fenetre
-    y_centre = (cfg.hauteur_fenetre - y_max)/2 +\
-               (cfg.hauteur_fenetre - cfg.hauteur_allumette)/2
+    nombre_rangees = len(liste_marienbad)
+    nombre_colonnes_max = max(liste_marienbad)
 
-    for j in range(nb_rangees):
+    marge_largeur = cfg.largeur_fenetre*0.05
+    marge_hauteur = cfg.hauteur_fenetre*0.175
+    
+    view_ax = marge_largeur
+    view_ay = marge_hauteur
+    view_bx = cfg.largeur_fenetre - marge_largeur
+    view_by = cfg.hauteur_fenetre - marge_hauteur
+
+    largeur_case = (view_bx - view_ax)/nombre_colonnes_max
+    hauteur_case = (view_by - view_ay)/nombre_rangees
+
+    for j in range(nombre_rangees):
         ligne_allumettes = []
         for i in range(liste_marienbad[j]):
             ligne_allumettes.append(
                 Allumette(
-                    ax=i * espacement_x + x_centre,
-                    ay=j * espacement_y + y_centre,
-                    bx=i * espacement_x + x_centre + cfg.largeur_allumette,
-                    by=j * espacement_y + y_centre + cfg.hauteur_allumette
+                    ax=view_ax + (i+0.5)*largeur_case,
+                    ay=view_ay + j*hauteur_case,
+                    bx=(view_ax + (i+0.5)*largeur_case)+largeur_case,
+                    by=(view_ay + j*hauteur_case)+hauteur_case
                 )
             )
-        liste_allumettes.append(ligne_allumettes)
 
-    return liste_allumettes
+        liste_allumettes.append(ligne_allumettes)
+    
+    if mode_classique:
+        del liste_allumettes[0]
+        del liste_allumettes[1]
+
+    return liste_allumettes, (largeur_case, hauteur_case)
 
 
 def gen_lst_coup_possibles(k: int) -> list:

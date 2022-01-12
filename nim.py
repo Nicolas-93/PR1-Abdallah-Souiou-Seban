@@ -135,21 +135,29 @@ def fin(joueur: int):
 
 def jeu(liste_marienbad):
 
+    # Initialisation des positions des allumettes
+    liste_allumettes, taille_cases = gameplay.initialiser_allumettes(liste_marienbad)
+    coeff = graphiques.calcul_taille_image(
+        cfg.taille_image,
+        taille_cases, cfg.espacement_allumettes)
+    image_allumette = fltk.redimensionner_image('allumette.png', coeff)
+    image_allumette_brulee = fltk.redimensionner_image(
+        'allumette-brulee.png', coeff)
+
+    # Logique du jeu
     adversaire = (('3X-PL0-X10N' if cfg.mode_difficile else 'T3R3Z1')
                   if cfg.mode_solo else
                   'Joueur 2')
     coups_possibles = (range(1, max(liste_marienbad) + 1)
                        if len(liste_marienbad) > 1 else
                        cfg.coups_possibles)
-
     coups_gagnants = solo.coups_gagnants(
-        cfg.nombre_allumettes, coups_possibles
-    )
-    liste_allumettes = gameplay.initialiser_allumettes(liste_marienbad)
+        cfg.nombre_allumettes, coups_possibles)
     coup, rangee_coup = coups_gagnants[len(liste_allumettes[0])], 0
     bouton_precedent = None
     indice_coups_possibles = -1
     joueur = 1
+    
     liste_boutons_jeu = [
         bouton.cree_bouton_simple(
             0.3, 0.05, 0.7, 0.15,
@@ -174,7 +182,6 @@ def jeu(liste_marienbad):
         try:
             fltk.efface_tout()
             graphiques.background("#3f3e47")
-
             ev = fltk.donne_ev()
             tev = fltk.type_ev(ev)
             nom_bouton = bouton.dessiner_boutons(liste_boutons_jeu)
@@ -382,14 +389,7 @@ if __name__ == "__main__":
             'Jeux de Nim'
         )
         liste_chute = animation.initialisation(cfg.nombre_allumettes_animation)
-        coeff = graphiques.calcul_taille_image(
-            cfg.taille_image,
-            (cfg.largeur_allumette, cfg.hauteur_allumette)
-        )
-        image_allumette = fltk.redimensionner_image('allumette.png', coeff)
-        image_allumette_brulee = fltk.redimensionner_image(
-            'allumette-brulee.png', coeff
-        )
+
         music.song('Neutral')
         menu()
     else:

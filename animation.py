@@ -38,7 +38,7 @@ def initialisation(number: float) -> list:
          imagechute1 = resize(img1)
          imagechute2 = resize(img2)
 
-    for i in range(number+1):
+    for _ in range(number+1):
         imagechute = (imagechute1
                       if bool(random.getrandbits(1)) else
                       imagechute2)

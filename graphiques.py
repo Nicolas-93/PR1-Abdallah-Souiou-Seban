@@ -43,19 +43,27 @@ def dessiner_allumettes(liste_allumettes: List[Allumette],
             fltk.afficher_image(
                 allumette.ax,
                 allumette.ay,
-                image, ancrage='nw'
+                image, ancrage='n'
             )
 
 
-def calcul_taille_image(taille_image: tuple, taille_box: tuple):
+def calcul_taille_image(taille_image: tuple, taille_box: tuple, marge: float):
     """
     Calcule le coefficient d'agrandissement ou de réduction
-    afin de préserver le ratio
-    à appliquer à l'image, afin d'optimiser l'espace de la box.
+    afin de préserver le ratio à appliquer à l'image,
+    afin d'optimiser l'espace de la box.
+    
+    :param tuple taille_image: Tuple représentant la largeur et
+    la hauteur de l'image
+    :param tuple taille_box: Tuple représentant la largeur et
+    la hauteur de la box qui contiendra l'image
+    :param float marge: Marge à appliquer au minimum sur les bords
+    
     """
 
     largeur_image, hauteur_image = taille_image
-    largeur_box, hauteur_box = taille_box
+    marge /= 2
+    largeur_box, hauteur_box = taille_box[0] - marge, taille_box[1] - marge
 
     return min(largeur_box/largeur_image, hauteur_box/hauteur_image)
 
