@@ -12,7 +12,7 @@ import animation
 import solo
 import music
 
-
+liste_boutons_options = None
 def menu():
 
     music.initialisation()
@@ -251,69 +251,72 @@ def jeu(liste_marienbad):
 
 def options():
 
-    liste_boutons_options = [
-        bouton.cree_bouton_booleen(
-            0.05, 0.45, 0.95, 0.55,
-            'Misere',
-            cfg.misere,
-            'Mode misère', 'Mode normal',
-            invert_color=True
-        ),
-        bouton.cree_bouton_booleen(
-            0.05, 0.15, 0.45, 0.25,
-            'Solo',
-            cfg.mode_solo,
-            'Mode solo', '2 joueurs'
-        ),
-        bouton.cree_bouton_texte(
-            0.55, 0.30, 0.65, 0.40,
-            cfg.nombre_allumettes, factice=True
-        ),
-        bouton.cree_bouton_simple(
-            0.05, 0.75, 0.95, 0.85,
-            'Menu'
-        ),
-        bouton.cree_bouton_texte(
-            0.05, 0.30, 0.20, 0.40,
-            "Nombre", unifier_texte=False, factice=True
-        ),
-        bouton.cree_bouton_simple(
-            0.25, 0.30, 0.35, 0.40,
-            '-10'
-        ),
-        bouton.cree_bouton_simple(
-            0.40, 0.30, 0.50, 0.40,
-            '-1'
-        ),
-        bouton.cree_bouton_simple(
-            0.70, 0.30, 0.80, 0.40,
-            '+1'
-        ),
-        bouton.cree_bouton_simple(
-            0.85, 0.30, 0.95, 0.40,
-            '+10'
-        ),
-        bouton.cree_bouton_booleen(
-            0.05, 0.60, 0.20, 0.7,
-            'Animation', cfg.animation,
-            'Animé', 'Animé',
-            unifier_texte=False
-        ),
-        bouton.cree_bouton_booleen(
-            0.5, 0.15, 0.95, 0.25,
-            'Difficulte',
-            cfg.mode_difficile,
-            'hardcore', 'facile',
-            invert_color=True, invisible=(not cfg.mode_solo)
-        ),
-        bouton.cree_bouton_booleen(
-            0.25, 0.60, 0.35, 0.7,
-            'Son', cfg.son,
-            'Son', 'Son', unifier_texte=False
-        )
-    ]
+    global liste_boutons_options
+    
+    if liste_boutons_options is None:
+        liste_boutons_options = [
+            bouton.cree_bouton_booleen(
+                0.05, 0.45, 0.95, 0.55,
+                'Misere',
+                cfg.misere,
+                'Mode misère', 'Mode normal',
+                invert_color=True
+            ),
+            bouton.cree_bouton_booleen(
+                0.05, 0.15, 0.45, 0.25,
+                'Solo',
+                cfg.mode_solo,
+                'Mode solo', '2 joueurs'
+            ),
+            bouton.cree_bouton_texte(
+                0.55, 0.30, 0.65, 0.40,
+                cfg.nombre_allumettes, factice=True
+            ),
+            bouton.cree_bouton_simple(
+                0.05, 0.75, 0.95, 0.85,
+                'Menu'
+            ),
+            bouton.cree_bouton_texte(
+                0.05, 0.30, 0.20, 0.40,
+                "Nombre", unifier_texte=False, factice=True
+            ),
+            bouton.cree_bouton_simple(
+                0.25, 0.30, 0.35, 0.40,
+                '-10'
+            ),
+            bouton.cree_bouton_simple(
+                0.40, 0.30, 0.50, 0.40,
+                '-1'
+            ),
+            bouton.cree_bouton_simple(
+                0.70, 0.30, 0.80, 0.40,
+                '+1'
+            ),
+            bouton.cree_bouton_simple(
+                0.85, 0.30, 0.95, 0.40,
+                '+10'
+            ),
+            bouton.cree_bouton_booleen(
+                0.05, 0.60, 0.20, 0.7,
+                'Animation', cfg.animation,
+                'Animé', 'Animé',
+                unifier_texte=False
+            ),
+            bouton.cree_bouton_booleen(
+                0.5, 0.15, 0.95, 0.25,
+                'Difficulte',
+                cfg.mode_difficile,
+                'hardcore', 'facile',
+                invert_color=True, invisible=(not cfg.mode_solo)
+            ),
+            bouton.cree_bouton_booleen(
+                0.25, 0.60, 0.35, 0.7,
+                'Son', cfg.son,
+                'Son', 'Son', unifier_texte=False
+            )
+        ]
 
-    bouton.unifier_taille_texte(liste_boutons_options)
+        bouton.unifier_taille_texte(liste_boutons_options)
 
     while True:
         try:

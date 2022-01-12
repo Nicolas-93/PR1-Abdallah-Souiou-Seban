@@ -73,7 +73,6 @@ def coups_gagnants_marienbad(liste_allumettes: List[int]) -> Tuple[int, int]:
         for coup in range(1, new_allumettes[rangee] + 1):
             liste_arrivee = new_allumettes[::]
             liste_arrivee[rangee] -= coup
-            print(nimsomme(liste_arrivee))
             if not cfg.misere and nimsomme(liste_arrivee) == 0:
                 return rangee, coup - 1
             if cfg.misere and int(nimsomme(liste_arrivee)) == 1:

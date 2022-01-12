@@ -8,10 +8,10 @@ import fltk
 
 #------------------------------ Configuration -----------------------------#
 
-largeur_fenetre, hauteur_fenetre    =   500, 500
+largeur_fenetre, hauteur_fenetre    =   800, 640
 coups_possibles                     =   [1,2,4,5]
 liste_marienbad                     =   [1,3,5,7]
-nombre_allumettes                   =   10
+nombre_allumettes                   =   21
 misere                              =   False
 animation                           =   True
 mode_solo                           =   True
